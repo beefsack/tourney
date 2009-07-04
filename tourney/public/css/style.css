@@ -1,0 +1,56 @@
+body
+{
+	background-color: #60a8b2;
+}
+
+#pac
+{
+	TOP:15px; 
+	margin-left: auto ;
+	margin-right: auto ;
+	text-align:center; 
+	z-index:4
+}
+	
+#main 
+{
+	z-index:1;
+	positiom: absolute;
+	width: 900px ;
+	margin-left: auto ;
+	margin-right: auto ;
+	background: #edddbd;
+	margin-top: -90px
+}
+
+#info 
+{
+	width: 250px;
+	float:right;
+	margin-right:5px;
+	margin-top:30px;
+	background: #211d1c;
+	color:#edddbd;
+	font-family:verdana;
+	padding-top:5px;
+	padding-left:5px
+	
+
+}
+
+
+h1
+{
+	color:#854040;
+	font-family:verdana;
+}
+
+#content 
+{
+	color:#211d1c;
+	width:600px;
+	padding-left:15px;
+	font-family:verdana;
+	font-size:small;
+}
+	

@@ -5,14 +5,18 @@ class IndexController extends Zend_Controller_Action
 
     public function init()
     {
-        /* Initialize action controller here */
+    	$this->view->headTitle("tourney - ");
     }
 
     public function indexAction()
     {
-        // action body
+    	$this->view->headTitle("YA MUM");
+    }
+    
+    public function eggAction()
+    {
+    	$this->view->headTitle("U R AN EGG");
     }
 
 
 }
-

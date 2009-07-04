@@ -1,0 +1,27 @@
+<?php 
+// Set up crap
+// @todo gotta stop doing direct /tourney/public and do it config style
+$this->headLink()->appendStylesheet('/tourney/public/css/style.css');
+?>
+<?php echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ?>
+<?php echo $this->doctype()."\n" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<?php
+	echo $this->headLink()."\n";
+	echo $this->headTitle()."\n";
+?>
+</head>
+<body>
+<div id=pac>
+<img src="/tourney/public/img/pac.png" /></div>
+<div id="main">
+<br /><br /><br /><br />
+<h1>HAHA~!</h1>
+<div id="info">WHAM!<br /><br />a text<br />another text<br />whoa<br />A TRUCK!</div>
+<div id="content">
+<?php echo $this->layout()->content ?>
+</div>
+</div>
+</body>
+</html>
