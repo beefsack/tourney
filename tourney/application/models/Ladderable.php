@@ -1,6 +1,6 @@
 <?php
 
-interface Tourney_Ladderable
+interface Model_Ladderable
 {
 	/**
 	 * Returns a Ladder containing the relevant standings for the tournament
