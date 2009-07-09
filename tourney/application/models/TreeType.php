@@ -1,6 +1,6 @@
 <?php
 
-class TreeType
+class Tourney_TreeType
 {
 	// $_data is the data to be held at this node
 	private $_data;

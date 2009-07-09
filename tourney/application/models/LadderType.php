@@ -1,6 +1,6 @@
 <?php
 
-class LadderType
+class Model_LadderType
 {
 	// $_ladderArray is the actual ladder data
 	private $_ladderArray = array();
