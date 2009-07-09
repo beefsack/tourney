@@ -16,4 +16,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         ));
         return $autoloader;
     }
+    
+    protected function _initDb()
+    {
+    	$dbconfig = new Zend_Config_Ini(APPLICATION_PATH . '/configs/database.ini', APPLICATION_ENV);
+    	$db = Zend_Db::factory($dbconfig);
+    	Zend_Db_Table_Abstract::setDefaultAdapter($db);
+    }
 }
