@@ -1,6 +1,6 @@
 <?php
 
-class Model_Type_SingleElimination extends Model_Type_Abstract
+class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_Treeable
 {
 	
 }

@@ -6,8 +6,6 @@ class IndexController extends Zend_Controller_Action
     public function init()
     {
     	$this->view->headTitle("tourney - ");
-    	$egg = new Model_LadderType();
-    	$dog = new Model_MatchupType_Seed();
     }
 
     public function indexAction()
