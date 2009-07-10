@@ -21,6 +21,5 @@ class TestController extends Zend_Controller_Action
     	$insertdata['description'] = 'this game is an egg';
     	$insertdata['scoringtype'] = 'highestscore';
     	$egg->insert($insertdata);
-    	$egg->select()->where('egg=5')->query();
     }
 }
