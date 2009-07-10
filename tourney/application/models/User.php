@@ -2,6 +2,7 @@
 
 class Model_User
 {
+	// Instance of the DbTable to directly access the database.  Accessed via $this->_getTable()
 	static protected $_table;
 	
 	/**
