@@ -51,32 +51,10 @@ abstract class Model_Type_Abstract
 	}
 	
 	/**
-	 * Add a participant to the tourney
-	 * @param Model_Participant $participant The participant to add
-	 * @return $this
-	 */	
-	public function addParticipant(Model_Participant $participant)
-	{
-		$this->_participantList->addParticipant($participant);
-		return $this;
-	}
-	
-	/**
-	 * Add a list of participants to the tourney
-	 * @param Model_ParticipantList $participants The participant list to add
-	 * @return $this
-	 */	
-	public function addParticipant(Model_ParticipantList $participants)
-	{
-		$this->_participantList->addParticipant($participants);
-		return $this;
-	}
-	
-	/**
 	 * Gets the match list
 	 * @return Model_MatchList
 	 */
-	public function getMatchList()
+	public function &getMatchList()
 	{
 		return $this->_matchList;
 	}
@@ -85,7 +63,7 @@ abstract class Model_Type_Abstract
 	 * Gets the local participant list
 	 * @return Model_ParticipantList
 	 */
-	public function getParticipantList()
+	public function &getParticipantList()
 	{
 		return $this->_participantList;
 	}
@@ -132,28 +110,6 @@ abstract class Model_Type_Abstract
 		}
 	}
 
-	/**
-	 * Remove a participant from the tourney
-	 * @param Model_Participant $participant The participant to remove
-	 * @return $this
-	 */
-	public function removeParticipant(Model_Participant $participant)
-	{
-		$this->_participantList->removeParticipant($participant);
-		return $this;
-	}
-	
-	/**
-	 * Remove a list of participants from the tourney
-	 * @param Model_ParticipantList $participants The participant list to remove
-	 * @return $this
-	 */
-	public function removeParticipant(Model_ParticipantList $participants)
-	{
-		$this->_participantList->removeParticipant($participants);
-		return $this;
-	}
-	
 	/**
 	 * Saves the tourney to the database
 	 */
