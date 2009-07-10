@@ -20,6 +20,6 @@ class TestController extends Zend_Controller_Action
     	$insertdata['name'] = 'egg';
     	$insertdata['description'] = 'this game is an egg';
     	$insertdata['scoringtype'] = 'highestscore';
-    	$egg->insert($insertdata);
+    	//$egg->insert($insertdata); // Removed this cos we don't want database spam
     }
 }
