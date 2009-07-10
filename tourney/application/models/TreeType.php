@@ -88,7 +88,7 @@ class Model_TreeType
 	
 	/**
 	 * Returns the depth of the tree.  If the current node has no children, depth is 1.
-	 * @return Integer
+	 * @return integer
 	 */
 	public function treeDepth()
 	{

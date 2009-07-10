@@ -11,16 +11,49 @@ class Model_TourneyData implements Iterator, ArrayAccess
 	 */
 	public function __toString()
 	{
-		// @todo write __toString
+		$returnStr = "";
+		if (is_array($this->_data)) {
+			foreach ($this->_data as $key => $data) {
+				$returnStr .= "$key:$data;";
+			}
+		}
+		return $returnStr;
 	}
 	
 	/**
 	 * Takes data and loads it into the local array.  Can be string in key:value; notation, an array or another Model_TourneyData
 	 * @param $data
 	 */
-	protected function _initialise($data)
+	public function add($data)
 	{
-		// @todo write initialise
+		if (is_string($data)) {
+			// Handle for string
+			$options = split(';', $data);
+			foreach ($options as $option) {
+				$tokens = split(':', $option, 2);
+				if (count($tokens) == 2) {
+					$this->_data[$tokens[0]] = $tokens[1];
+				}
+			}
+		} elseif (is_array($data)) {
+			// Handle for array
+			foreach ($data as $key => $item) {
+				$this->_data[$key] = $item;
+			}
+		} elseif ($data instanceof Model_TourneyData) {
+			// Handle for another instance of Model_TourneyData
+			foreach ($data->getArray() as $key => $item) {
+				$this->_data[$key] = $item;
+			}
+		}
+	}
+	
+	/**
+	 * Clears the array
+	 */
+	public function clear()
+	{
+		unset($this->_data);
 	}
 	
 	/**
@@ -30,6 +63,15 @@ class Model_TourneyData implements Iterator, ArrayAccess
 	public function current()
 	{
 		return current($this->_data);
+	}
+	
+	/**
+	 * Returns the raw array of data
+	 * @return array
+	 */
+	public function getArray()
+	{
+		return $this->_data;
 	}
 
 	/**
@@ -45,18 +87,11 @@ class Model_TourneyData implements Iterator, ArrayAccess
 	 * Constructor that takes data to initialise.  Data can be a string or it can be another Model_TourneyData or it can be a plain old array
 	 * @param $data Data to load
 	 */
-	function Model_TourneyData($data)
+	function Model_TourneyData($data = NULL)
 	{
-		$this->_initialise($data);
+		$this->add($data);
 	}
 	
-	/**
-	 * Default constructor, does nothing
-	 */
-	function Model_TourneyData()
-	{
-	}
-
 	/**
 	 * Next element for Iterator interface
 	 * @return Mixed
@@ -111,7 +146,7 @@ class Model_TourneyData implements Iterator, ArrayAccess
 	 */
 	public function rewind()
 	{
-		return rewind($this->_data);
+		return reset($this->_data);
 	}
 	
 	/**

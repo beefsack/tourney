@@ -20,6 +20,11 @@ class TestController extends Zend_Controller_Action
     public function indexAction()
     {
     	$this->view->headTitle("YA MUM");
-    	$dataObject = new Model_TourneyData();
+    	$dataObject1 = new Model_TourneyData("egg:yolk:banana;banana:split;");
+    	$dataObject = new Model_TourneyData($dataObject1);
+    	$dataObject['fart'] = 'bacon';
+    	$dataObject['smeg'] = 'chortle';
+    	var_dump($dataObject->getArray());
+    	echo $dataObject;
     }
 }

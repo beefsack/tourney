@@ -69,7 +69,7 @@ class Match_List implements Iterator
 	 */
 	public function rewind()
 	{
-		return rewind($this->_list);
+		return reset($this->_list);
 	}
 	
 	/**

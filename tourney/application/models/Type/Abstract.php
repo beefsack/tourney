@@ -120,21 +120,16 @@ abstract class Model_Type_Abstract
 	}
 	
 	/**
-	 * Constructor to create an empty tourney
-	 */
-	function Model_Type_Abstract()
-	{
-		$this->_matchList = new Model_MatchList();
-		$this->_participantList = new Model_ParticipantList();
-	}
-	
-	/**
 	 * Constructor to load a tourney from the database
 	 * @param $index Index of tourney to load
 	 */
-	function Model_Type_Abstract($index)
+	function Model_Type_Abstract($index = 0)
 	{
-		$this->load($index);
+		$this->_matchList = new Model_MatchList();
+		$this->_participantList = new Model_ParticipantList();
+		if ($index > 0) {
+			$this->load($index);
+		}
 	}
 
 	/**

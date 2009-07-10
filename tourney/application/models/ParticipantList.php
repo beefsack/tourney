@@ -69,7 +69,7 @@ class Model_ParticipantList implements Iterator
 	 */
 	public function rewind()
 	{
-		return rewind($this->_list);
+		return reset($this->_list);
 	}
 	
 	/**
