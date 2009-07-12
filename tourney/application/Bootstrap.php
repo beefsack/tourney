@@ -23,4 +23,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     	$db = Zend_Db::factory($dbconfig);
     	Zend_Db_Table_Abstract::setDefaultAdapter($db);
     }
+    
+    protected function _initTimezone()
+    {
+    	date_default_timezone_set('UTC');
+    }
 }

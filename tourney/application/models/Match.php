@@ -8,20 +8,48 @@ class Model_Match
 	protected $_dataObject;
 	// Match gameid = db gameid column
 	protected $_gameid;
-	// Match game in object form
+	// Match game in object form.  Always a reference
 	protected $_gameObject;
 	// Match id = db id column
 	protected $_id;
 	// Match participant list for who is playing the match
 	protected $_participantList;
-	// Match playtime = db playtime column
+	// Match playtime = db playtime column.  Zend_Date object http://zendframework.com/manual/en/zend.date.html
 	protected $_playtime;
-	// Match scheduletime = db scheduletime column
+	// Match scheduletime = db scheduletime column.  Zend_Date object http://zendframework.com/manual/en/zend.date.html
 	protected $_scheduletime;
 	// Instance of the DbTable to directly access the database.  Accessed via $this->_getTable()
 	static protected $_table;
-	// Match tourneyid = db tourneyid column
+	// Parent tournament tourneyid = db tourneyid column
 	protected $_tourneyid;
+	
+	/**
+	 * Get an item from the dataObject
+	 * @param $offset
+	 * @return mixed
+	 */
+	public function getData($offset)
+	{
+		return $this->_dataObject[$offset];
+	}
+	
+	/**
+	 * Gets the game to be played
+	 * @return Model_Game
+	 */
+	public function &getGame()
+	{
+		return $this->_gameObject;
+	}
+	
+	/**
+	 * Gets the match id, 0 if not saved in db yet
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->_id;
+	}
 	
 	/**
 	 * Singleton method to get the match table class
@@ -36,12 +64,54 @@ class Model_Match
 	}
 	
 	/**
+	 * Gets the participant list
+	 * @return Model_ParticipantList
+	 */
+	public function &getParticipantList()
+	{
+		return $this->_participantList;
+	}
+	
+	/**
+	 * Gets the play time, empty if not played yet
+	 * @return string
+	 */
+	public function getPlaytime()
+	{
+		if ($this->_playtime->getTimestamp() == 0) {
+			return NULL;
+		}
+		return $this->_playtime->get();
+	}
+	
+	/**
 	 * Gets the scores from each of the participants in the participant list, checks the game object to get the requirement for victory, then returns a ParticipantList in the order of placings.
-	 * @return Model_ParticipantList, NULL if no result yet
+	 * @return Model_ParticipantList, NULL if no result yet because playtime is not set
 	 */
 	public function getResult()
 	{
 		// @todo write getResult
+	}
+	
+	/**
+	 * Gets the scheduled time, NULL if there is no scheduled time
+	 * @return string
+	 */
+	public function getScheduletime()
+	{
+		if ($this->_scheduletime->getTimestamp() == 0) {
+			return NULL;
+		}
+		return $this->_scheduletime->get();
+	}
+	
+	/**
+	 * Gets the parent tourney id, 0 if it is a standalone match
+	 * @return integer
+	 */
+	public function getTourneyid()
+	{
+		return $this->_tourneyid;
 	}
 	
 	/**
@@ -63,7 +133,8 @@ class Model_Match
 	{
 		$this->_dataObject = new Model_TourneyData();
 		$this->_participantList = new Model_ParticipantList();
-		$this->_gameObject = new Model_Game();
+		$this->_playtime = new Zend_Date();
+		$this->_scheduletime = new Zend_Date();
 		if ($index > 0) {
 			$this->load($index);
 		}
@@ -76,6 +147,73 @@ class Model_Match
 	public function save()
 	{
 		// @todo write save
+		return $this;
+	}
+	
+	/**
+	 * Sets a piece of data in the dataObject
+	 * @param $offset Offset to save at
+	 * @param $value Value to save
+	 * @return $this
+	 */
+	public function setData($offset, $value)
+	{
+		$this->_dataObject[$offset] = $value;
+		return $this;
+	}
+	
+	/**
+	 * Sets the game for the match.  Uses a reference so if the game has to be saved and is used for multiple matches, it is only saved once.  Use getGame and unset to prevent memory leaks.
+	 * @param Model_Game $game The game to set
+	 * @return $this
+	 */
+	public function setGame(Model_Game &$game)
+	{
+		$this->_gameObject = $game;
+		return $this;
+	}
+	
+	/**
+	 * Sets the play time.  Setting this will flag the game as finished and will produce a result.
+	 * @param $value Any accepted value for Zend_Date
+	 * @return $this
+	 */
+	public function setPlaytime($value)
+	{
+		$this->_playtime->set($value);
+		return $this;
+	}
+	
+	/**
+	 * Sets the schedule time.
+	 * @param $value Any accepted value for Zend_Date
+	 * @return $this
+	 */
+	public function setScheduletime($value)
+	{
+		$this->_scheduletime->set($value);
+		return $this;
+	}
+	
+	/**
+	 * Sets the parent tourney id
+	 * @param $value Tourney id
+	 * @return $this
+	 */
+	public function setTourneyid($value)
+	{
+		$this->_tourneyid = $value;
+		return $this;
+	}
+	
+	/**
+	 * Unset a piece of data in the data object
+	 * @param $offset Offset to unset
+	 * @return $this
+	 */
+	public function unsetData($offset)
+	{
+		unset($this->_dataObject[$offset]);
 		return $this;
 	}
 }
