@@ -30,4 +30,167 @@ class Model_Participant
 		}
 		return $this->_table;
 	}
+	
+	/**
+	 * Gets the data at the offset
+	 * @param $offset Offset to get data from
+	 * @return mixed
+	 */
+	public function getData($offset)
+	{
+		return $this->_data[$offset];
+	}
+	
+	/**
+	 * Gets the id of this participant
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->_id;
+	}
+	
+	/**
+	 * Gets the matchid for this participant
+	 * @return integer
+	 */
+	public function getMatchid()
+	{
+		return $this->_matchid;
+	}
+	
+	/**
+	 * Gets the match object for this participant
+	 * @return Model_Match
+	 */
+	public function getMatch()
+	{
+		if (isset($this->_matchid)) {
+			return new Model_Match($this->_matchid);
+		}
+		return NULL;
+	}
+	
+	/**
+	 * Gets the participant id
+	 * @return integer
+	 */
+	public function getParticipantid()
+	{
+		return $this->_participantid;
+	}
+	
+	/**
+	 * Gets the actual participant object
+	 * @return mixed
+	 */
+	public function getParticipant()
+	{
+		if (isset($this->_type)) {
+			$returnobj = new $this->_type;
+			if ($returnobj instanceof Model_Participantable) {
+				$returnobj->load($this->_participantid);
+				return $returnobj;
+			}
+		}
+		return NULL;
+	}
+	
+	/**
+	 * Gets the score for this participant
+	 * @return mixed
+	 */
+	public function getScore()
+	{
+		return $this->_score;
+	}
+	
+	/**
+	 * Gets the object type of the participant
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->_type;
+	}
+	
+	/**
+	 * Loads the participant from the database
+	 * @param $index Index of participant to load
+	 * @return $this
+	 */
+	public function load($index)
+	{
+		// @todo write load
+		return $this;
+	}
+	
+	/**
+	 * Save this participant to the database
+	 * @return $this
+	 */
+	public function save()
+	{
+		// @todo write save
+		return $this;
+	}
+	
+	/**
+	 * Set the participant for this object
+	 * @param Model_Participantable $participant The participant to set
+	 * @return $this
+	 */
+	public function set(Model_Participantable $participant)
+	{
+		if (!($this->_participantid = $participant->getId())) {
+			throw new Exception('No participant id returned');
+		}
+		$this->_type = get_class($participant);
+		return $this;
+	}
+	
+	/**
+	 * Sets data at an offset in the data object
+	 * @param $offset Offset to set data at
+	 * @param $value Value to set
+	 * @return $this
+	 */
+	public function setData($offset, $value)
+	{
+		$this->_dataObject['offset'] = $value;
+		return $this;
+	}
+
+	/**
+	 * Sets the match id for this participant
+	 * @param $value Id to set
+	 * @return $this
+	 */
+	public function setMatchid($value)
+	{
+		$this->_matchid = $value;
+		return $this;
+	}
+	
+	/**
+	 * Sets the score for the participant
+	 * @param $value Score to set
+	 * @return $this
+	 */
+	public function setScore($value)
+	{
+		$this->_score = $value;
+		return $this;
+	}
+	
+	/**
+	 * Unsets data at an offset
+	 * @param $offset Offset to unset at
+	 * @return $this
+	 */
+	public function unsetData($offset)
+	{
+		unset($this->_dataObject[$offset]);
+		return $this;
+	}
 }

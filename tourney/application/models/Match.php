@@ -8,8 +8,6 @@ class Model_Match
 	protected $_dataObject;
 	// Match gameid = db gameid column
 	protected $_gameid;
-	// Match game in object form.  Always a reference
-	protected $_gameObject;
 	// Match id = db id column
 	protected $_id;
 	// Match participant list for who is playing the match
@@ -22,6 +20,29 @@ class Model_Match
 	static protected $_table;
 	// Parent tournament tourneyid = db tourneyid column
 	protected $_tourneyid;
+	
+	/**
+	 * Singleton method to get the match table class
+	 * @return Model_DbTable_Match
+	 */
+	protected function _getTable()
+	{
+		if (!isset($this->_table)) {
+			$this->_table = new Model_DbTable_Match();
+		}
+		return $this->_table;
+	}
+	
+	/**
+	 * Adds a participant to the match
+	 * @param $participant Participant to add
+	 * @return $this
+	 */
+	public function addParticipant($participant)
+	{
+		$this->_participantList->addParticipant($participant);
+		return $this;
+	}
 	
 	/**
 	 * Get an item from the dataObject
@@ -37,9 +58,34 @@ class Model_Match
 	 * Gets the game to be played
 	 * @return Model_Game
 	 */
-	public function &getGame()
+	public function getGame()
 	{
-		return $this->_gameObject;
+		if ($this->_gameid > 0) {
+			return new Model_Game($this->_gameid);
+		} else {
+			return NULL;
+		}
+	}
+
+	/**
+	 * Gets the game object for this match
+	 * @return Model_Game
+	 */
+	public function getGame()
+	{
+		if (isset($this->_gameid)) {
+			return new Model_Game($this->_gameid);
+		}
+		return NULL;
+	}
+	
+	/**
+	 * Returns the gameid
+	 * @return integer
+	 */
+	public function getGameid()
+	{
+		return $this->_gameid;
 	}
 	
 	/**
@@ -52,22 +98,10 @@ class Model_Match
 	}
 	
 	/**
-	 * Singleton method to get the match table class
-	 * @return Model_DbTable_Match
-	 */
-	protected function _getTable()
-	{
-		if (!isset($this->_table)) {
-			$this->_table = new Model_DbTable_Match();
-		}
-		return $this->_table;
-	}
-	
-	/**
 	 * Gets the participant list
 	 * @return Model_ParticipantList
 	 */
-	public function &getParticipantList()
+	public function getParticipantList()
 	{
 		return $this->_participantList;
 	}
@@ -90,7 +124,13 @@ class Model_Match
 	 */
 	public function getResult()
 	{
-		// @todo write getResult
+		if ($this->_scheduletime->getTimestamp() > 0 && ($game = $this->getGame()) !== NULL) {
+			$scoringobj = new $game->getScoringtype();
+			if ($scoringobj instanceof Model_VictoryCondition_Abstract) {
+				return $scoringobj->getStandings($this->_participantList);
+			}
+		}
+		return NULL;
 	}
 	
 	/**
@@ -167,9 +207,13 @@ class Model_Match
 	 * @param Model_Game $game The game to set
 	 * @return $this
 	 */
-	public function setGame(Model_Game &$game)
+	public function setGame($game)
 	{
-		$this->_gameObject = $game;
+		if ($game instanceof Model_Game) {
+			$this->_gameid = $game->getId();
+		} else {
+			$this->_gameid = $game;
+		}
 		return $this;
 	}
 	

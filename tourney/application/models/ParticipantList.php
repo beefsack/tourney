@@ -42,6 +42,17 @@ class Model_ParticipantList implements Iterator
 	{
 		return key($this->_list);
 	}
+	
+	/**
+	 * Load the participants for specified match
+	 * @param $index Match id
+	 * @return $this
+	 */
+	public function load($index)
+	{
+		// @todo write load
+		return $this;
+	}
 		
 	/**
 	 * Get the next item when iterating.  Required by Iterator interface.
@@ -70,6 +81,16 @@ class Model_ParticipantList implements Iterator
 	public function rewind()
 	{
 		return reset($this->_list);
+	}
+	
+	/**
+	 * Loops through each participant and calls save on each one
+	 * @return $this
+	 */
+	public function save()
+	{
+		// @todo write save
+		return $this;
 	}
 	
 	/**

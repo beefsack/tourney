@@ -83,6 +83,15 @@ class Model_Game
 	
 	public function save()
 	{
+		if (!isset($this->_name)) {
+			throw new Exception('$_name not set in Model_Game object');
+		}
+		if (!isset($this->_description)) {
+			throw new Exception('$_description not set in Model_Game object');
+		}
+		if (!isset($this->_scoringtype)) {
+			throw new Exception('$_scoringtype not set in Model_Game object');
+		}
 		// @todo write save
 	}
 	
@@ -109,13 +118,13 @@ class Model_Game
 	}
 	
 	/**
-	 * Sets the scoringtype of the game
-	 * @param $value Scoringtype
+	 * Sets the scoring type of the game
+	 * @param Model_VictoryCondition_Abstract $obj Scoring type
 	 * @return $this
 	 */
-	public function setScoringtype($value)
+	public function setScoringtype(Model_VictoryCondition_Abstract $obj)
 	{
-		$this->_scoringtype = $value;
+		$this->_scoringtype = get_class($obj);
 		return $this;
 	}
 }

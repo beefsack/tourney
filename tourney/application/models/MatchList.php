@@ -1,7 +1,8 @@
 <?php
 
-class Match_List implements Iterator
+class Model_MatchList implements Iterator
 {
+	// Actual array to store matches in
 	protected $_list = array();
 	
 	/**
@@ -44,6 +45,17 @@ class Match_List implements Iterator
 	}
 	
 	/**
+	 * Loads all matches for a specific tournament id
+	 * @param $index Tourney id
+	 * @return $this
+	 */
+	public function load($index)
+	{
+		// @todo write load
+		return $this;
+	}
+	
+	/**
 	 * Get the next item when iterating.  Required by Iterator interface.
 	 * @return Model_Match
 	 */
@@ -70,6 +82,16 @@ class Match_List implements Iterator
 	public function rewind()
 	{
 		return reset($this->_list);
+	}
+	
+	/**
+	 * Loops through all of the matches and calls save on each
+	 * @return $this
+	 */
+	public function save()
+	{
+		// @todo write save
+		return $this;
 	}
 	
 	/**
