@@ -55,6 +55,14 @@ abstract class Model_Type_Abstract
 	}
 	
 	/**
+	 * Saves the match list
+	 */
+	protected function _saveMatches()
+	{
+		$this->_matchList->save();
+	}
+	
+	/**
 	 * Add a participant
 	 * @param $participant Participant to add
 	 * @return $this
@@ -151,6 +159,7 @@ abstract class Model_Type_Abstract
 
 	/**
 	 * Saves the tourney to the database
+	 * @return $this
 	 */
 	public function save()
 	{
@@ -159,7 +168,14 @@ abstract class Model_Type_Abstract
 		/*
 		 * Saves the tourney to the database
 		 * This should all be done as a transaction, so if there is an error it can roll back the changes
+		 * Once the tourney has been rebuilt, it should save the data to the database.
+		 * If $_id was set before save, this tourney is already in the database an only needs to be updated
+		 * If $_id is 0, it needs to be an insert not an update
+		 * The matches aren't saved in this method because certain types of tourneys will have to override it to do it differently
+		 * Because of this, another function called saveMatches() is called and tourneys can override it if neccessary
 		 */
+		$this->_saveMatches();
+		return $this;
 	}
 	
 	/**

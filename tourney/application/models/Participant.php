@@ -133,6 +133,10 @@ class Model_Participant
 	public function load($index)
 	{
 		// @todo write load
+		/*
+		 * A simple load, which will just load the relevant data from the database and populate this object with it
+		 * The participant table has a data column, and the data from that column should be loaded into the $_dataObject using load
+		 */
 		return $this;
 	}
 	

@@ -58,6 +58,12 @@ class Model_ParticipantList implements Iterator
 	public function load($index)
 	{
 		// @todo write load
+		/*
+		 * A bit trickier load, similar to a matchlist load
+		 * First there will need to be a query finding all participants in the database with matchid of $index
+		 * Once that is found, need to loop through each and create a new Model_Participant object for each loading the relevant participant id
+		 * After creating each Model_Participant object and loading it, it is added to the array using addParticipant of this object
+		 */
 		return $this;
 	}
 		
@@ -78,6 +84,13 @@ class Model_ParticipantList implements Iterator
 	public function removeParticipant($participant)
 	{
 		// @todo write removeParticipant
+		/*
+		 * very similar to removeMatch in Model_MatchList
+		 * If $participant is a Model_Participant, loop through $_list and remove participant if found
+		 * If $participant is a Model_ParticipantList, call removeParticipant for each item of $participant
+		 * If $participant is anything else, throw a new exception
+		 * Can check class type using instanceof, ie: if ($participant instanceof Model_Participant) {
+		 */
 		return $this;
 	}
 	

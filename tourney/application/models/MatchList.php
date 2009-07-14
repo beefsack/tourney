@@ -59,6 +59,13 @@ class Model_MatchList implements Iterator
 	public function load($index)
 	{
 		// @todo write load
+		/*
+		 * A slightly more complicated load than the others
+		 * The param passed to this function is the index of a tourney
+		 * What this function first has to do is run a query to find all matches with a tourneyid the same as index
+		 * Then, for each match, a new Model_Match object is created passing the corresponding match id
+		 * After each Model_Match is created, it should be passed to the addMatch of this class to add it to the array
+		 */
 		return $this;
 	}
 	
@@ -79,6 +86,13 @@ class Model_MatchList implements Iterator
 	public function removeMatch($match)
 	{
 		// @todo write removeMatch
+		/*
+		 * Can get a Model_Match or Model_MatchList to remove from the current Model_MatchList
+		 * If it is a match, the function should loop through this array and remove the match if found
+		 * If it is a match list, this function should loop through each item of the match list and call this function again on each individual match in $match
+		 * If $match is neither a Model_Match or a Model_MatchList, a new exception should be thrown
+		 * instanceof should be used to check the class type of $match, eg: if ($match instanceof Model_Match)
+		 */
 		return $this;
 	}
 	

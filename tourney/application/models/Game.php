@@ -79,6 +79,10 @@ class Model_Game
 	public function load($index)
 	{
 		// @todo write load
+		/*
+		 * This one is simple, just a plain load from the game table with no sub objects to load
+		 * An example of a simple object load from the database is in the User class
+		 */
 	}
 	
 	public function save()
