@@ -6,16 +6,16 @@ class Model_User implements Model_Participantable
 	static protected $_table;
 	// User password = db password field
 	protected $_password;
-	// User username = db username field
-	protected $_username;
+	// User name = db name field
+	protected $_name;
 	
 	/**
-	 * Returns the username
+	 * Returns the name
 	 * @return string
 	 */
 	public function __toString()
 	{
-		return $this->_username();
+		return $this->_name();
 	}
 	
 	/**
@@ -32,7 +32,7 @@ class Model_User implements Model_Participantable
 	
 	public function getId()
 	{
-		return $this->_username;
+		return $this->_name;
 	}
 	
 	/**
@@ -45,33 +45,41 @@ class Model_User implements Model_Participantable
 	}
 	
 	/**
-	 * Returns the username
+	 * Returns the name
 	 * @return string
 	 */
-	public function getUsername()
+	public function getname()
 	{
-		return $this->_username;
+		return $this->_name;
 	}
 	
 	/**
 	 * Load a user from the database into this object
-	 * @param $username Username to load
+	 * @param $name name to load
 	 * @return $this
 	 */
-	public function load($username)
+	public function load($name)
 	{
-		// @todo write load
+		// Reference on select objects and executing them: http://zendframework.com/manual/en/zend.db.select.html
+		$select = $this->_getTable()->select()->where('name = ?', $name);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if (!$result) {
+			throw new Exception("name '$name' not found");
+		}
+		$this->_name = $result['name'];
+		$this->_password = $result['password'];
 		return $this;
 	}
 	
 	/**
 	 * Constructor
-	 * @param $username Optional username to load
+	 * @param $name Optional name to load
 	 */
-	function Model_User($username = '')
+	function Model_User($name = '')
 	{
-		if ($username > '') {
-			$this->load($username);
+		if ($name > '') {
+			$this->load($name);
 		}
 	}
 	
@@ -81,7 +89,26 @@ class Model_User implements Model_Participantable
 	 */
 	public function save()
 	{
-		// @todo write save
+		// Make sure username is set
+		if (!$this->_name) {
+			throw new Exception('Unable to save user as no username specified');
+		}
+		// Prepare data for storing
+		$data = array(
+			'name' => $this->_name,
+			'password' => $this->_password,
+		);
+		// Check if there is already a row for this username
+		$select = $this->_getTable()->select()->where('name = ?', $this->_name);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if ($result) {
+			// There is a row, so just update
+			$this->_getTable()->update($data, $this->_getTable()->getAdapter()->quoteInto('name = ?', $this->_name));
+		} else {
+			// There is no row, so insert
+			$this->_getTable()->insert($data);			
+		}
 		return $this;
 	}
 	
@@ -92,18 +119,19 @@ class Model_User implements Model_Participantable
 	 */
 	public function setPassword($value)
 	{
-		// @todo write setPassword
+		// Zend_Auth will be set up to use SHA1
+		$this->_password = sha1($value);
 		return $this;
 	}
 	
 	/**
-	 * Sets the username
-	 * @param $value Username to set
+	 * Sets the name
+	 * @param $value name to set
 	 * @return $this
 	 */
-	public function setUsername($value)
+	public function setName($value)
 	{
-		$this->_username = $value;
+		$this->_name = $value;
 		return $this;
 	}
 }

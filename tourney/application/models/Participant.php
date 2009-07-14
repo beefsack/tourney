@@ -12,6 +12,8 @@ class Model_Participant
 	protected $_matchid;
 	// id of actual participant from user or team table = db participantid column
 	protected $_participantid;
+	// result as a number = db result column
+	protected $_result;
 	// score = db score column
 	protected $_score;
 	// Instance of the DbTable to directly access the database.  Accessed via $this->_getTable()
@@ -97,6 +99,15 @@ class Model_Participant
 	}
 	
 	/**
+	 * Gets the result for this participant, 0 if no result yet
+	 * @return integer
+	 */
+	public function getResult()
+	{
+		return (integer) $this->_result;
+	}
+	
+	/**
 	 * Gets the score for this participant
 	 * @return mixed
 	 */
@@ -169,6 +180,17 @@ class Model_Participant
 	public function setMatchid($value)
 	{
 		$this->_matchid = $value;
+		return $this;
+	}
+	
+	/**
+	 * Sets the result for this participant
+	 * @param $value Integer result
+	 * @return $this
+	 */
+	public function setResult($value)
+	{
+		$this->_result = (integer) $value;
 		return $this;
 	}
 	

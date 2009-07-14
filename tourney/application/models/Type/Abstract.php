@@ -103,6 +103,13 @@ abstract class Model_Type_Abstract
 	static public function getTypeList()
 	{
 		// @todo write getTypeList
+		/*
+		 * Searches the Type folder for all different tournament types.
+		 * This is used for when a user is creating a tournament and want to select what type to use
+		 * The array is set up like so:
+		 * key: class name for tourney type (get_class() could be useful)
+		 * value: result of object getName()
+		 */
 	}
 	
 	/**
@@ -122,7 +129,8 @@ abstract class Model_Type_Abstract
 		/*
 		 * Loads the data for the tourney from the database.
 		 * First loads basic tourney info from the tourney database.
-		 * Then loads all matches for the tourney.  
+		 * See the user class for how to fetch using Zend_Db (user load has been written already)
+		 * Then loads all matches for the tourney by making a new Model_Match passing the match id to the constructor.  The loaded match can then be added to the matchlist
 		 */
 		$this->_dirty = false; // Since it is a fresh load, it isn't dirty
 		return $this;

@@ -22,6 +22,7 @@ abstract class Model_MatchupType_Abstract
 	 */
 	public function clearParticipants()
 	{
+		$this->_participantList->clearParticipantList();
 		return $this;
 	}
 	
@@ -38,6 +39,11 @@ abstract class Model_MatchupType_Abstract
 	static public function getMatchupTypeList()
 	{
 		// @todo write getMatchupTypeList
+		/*
+		 * What this will do is search through the type folder finding all the Abstract subclasses, and return an array list of them
+		 * This will make it possible to make a list of matchup types so a user can select the one they want when they create the tournament
+		 * The array to return should have key: the class name (which you can get using get_class()) and the value: the result for that objects getName()
+		 */
 	}
 	
 	/**

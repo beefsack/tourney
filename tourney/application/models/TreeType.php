@@ -20,6 +20,12 @@ class Model_TreeType
 		// @todo Write countLeaves
 		/*
 		 * countLeaves should be implemented recursively
+		 * A TreeType object is a leaf if isset(left()) and isset(right()) are false
+		 * Pseudocode could be something like:
+		 * if left is set, increment total by left->countLeaves
+		 * if right is set, increment total by right->countLeaves
+		 * if left and right are both not set, set total to 1
+		 * return total
 		 */
 		return $count;
 	}
@@ -33,6 +39,8 @@ class Model_TreeType
 		// @todo Write countNodes
 		/*
 		 * countNodes should be implemented recursively
+		 * Starting at the root, basically it should be return 1 + left->countNodes + right->countNodes
+		 * It would have to check first that left and right are set, cos calling countNodes on a null object would make PHP a bit emotional
 		 */
 		return $count;
 	}

@@ -13,6 +13,13 @@ class Model_MatchList implements Iterator
 	public function addMatch($match)
 	{
 		// @todo write addMatch
+		/*
+		 * This will have to behave differently depending on what type of object is passed as $match
+		 * If it is a Model_Match, all it has to do is add it to the array
+		 * If it is a Model_MatchList, it will have to loop through Model_MatchList (using foreach) and add each item individually
+		 * You can check class type like this: if ($match instanceof Model_Match) {
+		 * If it is not a Match or MatchList, it should throw a new exception
+		 */
 		return $this;
 	}
 	
