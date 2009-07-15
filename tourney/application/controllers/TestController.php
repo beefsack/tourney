@@ -1,5 +1,30 @@
 <?php
 
+    class bacon
+    {
+    	protected $_data;
+    	
+    	function bacon(&$data = NULL)
+    	{
+    		if ($data !== NULL) {
+    			$this->steak($data);
+    		}
+    	}
+    	
+    	function steak(&$thing)
+    	{
+    		echo "value of thing is $thing<br />";
+    		$this->_data =& $thing;
+    		echo "value of data is $this->_data<br />"; 
+    	}
+    	
+    	function __toString()
+    	{
+    		echo "returning thing value ".$this->_data."<br />";
+    		return (string) $this->_data;
+    	}
+    }
+    
 class TestController extends Zend_Controller_Action
 {
 
@@ -55,6 +80,29 @@ class TestController extends Zend_Controller_Action
     	$eggtourney->addParticipant($participant);
     	// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
     	$eggtourney->save();
+    }
+    
+    public function treereftestAction()
+    {
+    	// first test
+    	//$egg = new bacon();
+    	$dog = 2;
+    	//$egg->steak($dog);
+    	$egg = new bacon($dog);
+    	$dog = 5;
+    	echo "$egg<br />";
+    	// second test
+    	$toss = new Model_MatchList();
+    	$fart = new Model_Match();
+    	$fart->setData('somedata', 'somevalue');
+    	echo "initial value of somedata is ". $fart->getData('somedata') ."<br />";
+    	$fart2 = new Model_Match();
+    	$fart2->setData('fart', $fart);
+    	$fart->setData('somedata', 'this is a new value');
+    	echo $fart2->getData('fart')->getData('somedata')."<br />";
+    	$fart3 = $fart2;
+    	$fart3->setData('1','2');
+    	echo $fart2->getData('1')."<br />";
     }
     
     public function loadtournamentAction()

@@ -62,6 +62,17 @@ class Model_TreeType
 	{
 		return $this->_leftNode;
 	}
+	
+	/**
+	 * Constructor
+	 * @param $data Optional data to set
+	 */
+	public function Model_TreeType(&$data = NULL)
+	{
+		if ($data !== NULL) {
+			$this->setData($data);
+		}
+	}
 
 	/**
 	 * Get the right node
@@ -73,6 +84,21 @@ class Model_TreeType
 	}
 	
 	/**
+	 * Sets the data
+	 * @param $data The data to be held in this node
+	 * @return $this
+	 */
+	public function setData(&$data)
+	{
+		// @todo write setData
+		/*
+		 * Easy, just sets the data of this node to $data
+		 * Make sure to use the reference assignment =& instead of the normal copy assignment =
+		 */
+		return $this;
+	}
+	
+	/**
 	 * Set the left node
 	 * @param $data The data to be held in the left node
 	 * @return $this
@@ -80,6 +106,10 @@ class Model_TreeType
 	public function setLeft(&$data)
 	{
 		// @todo Write setLeft
+		/*
+		 * Sets the left node to $data.
+		 * Notice the &, making it a reference
+		 */
 		return $this;
 	}
 	
@@ -91,6 +121,10 @@ class Model_TreeType
 	public function setRight(&$data)
 	{
 		// @todo Write setRight
+		/*
+		 * Sets the right node to $data.
+		 * Notice the &, making it a reference
+		 */
 		return $this;
 	}
 	
@@ -102,7 +136,11 @@ class Model_TreeType
 	{
 		// @todo Write treeDepth
 		/*
+		 * This finds how deep the tree goes.  That would be massively useful for finding alignments for outputting a tree as an image, or maybe with css.
 		 * treeDepth should be implemented recursively
+		 * could be implemented like this:
+		 * return the maximum of (left node->treeDepth + 1, right node->treeDepth + 1)
+		 * That would recurse through every single node, but would only return the deepest one
 		 */
 		return $depth;
 	}	

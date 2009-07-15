@@ -2,6 +2,9 @@
 
 class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_Treeable
 {
+	// The tree for the elimination
+	protected $_tree;
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#_buildTourney()

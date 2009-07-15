@@ -55,19 +55,6 @@ class Model_Match
 	}
 	
 	/**
-	 * Gets the game to be played
-	 * @return Model_Game
-	 */
-	public function getGame()
-	{
-		if ($this->_gameid > 0) {
-			return new Model_Game($this->_gameid);
-		} else {
-			return NULL;
-		}
-	}
-
-	/**
 	 * Gets the game object for this match
 	 * @return Model_Game
 	 */
@@ -162,6 +149,13 @@ class Model_Match
 	public function load($index)
 	{
 		// @todo write load
+		/*
+		 * Loads this match in from the database
+		 * will load the match with the specified index
+		 * if it can't find a row in the table with that index, it should throw a new exception
+		 * after loading the match successfully, it will need to load the participants
+		 * for loading the participants, the Model_ParticipantList has a method for this.  You can call load and pass the id of this match
+		 */
 		return $this;
 	}
 	
@@ -187,6 +181,12 @@ class Model_Match
 	public function save()
 	{
 		// @todo write save
+		/*
+		 * A bit more to this save than just saving the match, this also needs to save all the participants for this match
+		 * Firstly it needs to save the match because if it doesn't have an $_id yet it needs to get one.
+		 * Each participant needs to know the match $_id before they can be saved
+		 * After saving the match to the database, you can get the last inserted id using $this->_getTable()->getAdapter()->lastInsertId();
+		 */
 		return $this;
 	}
 	

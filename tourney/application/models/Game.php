@@ -97,6 +97,12 @@ class Model_Game
 			throw new Exception('$_scoringtype not set in Model_Game object');
 		}
 		// @todo write save
+		/*
+		 * an easy save, there are already checks written to make sure the three members are set
+		 * Next thing to do would be to check if $_id is set or not
+		 * if $_id is set that means that this game is already in the database, so do an update
+		 * If $_id is not set, that means it is not yet in the database and requires to be inserted
+		 */
 	}
 	
 	/**

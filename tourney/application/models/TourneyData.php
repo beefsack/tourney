@@ -118,7 +118,7 @@ class Model_TourneyData implements Iterator, ArrayAccess
 	 */
 	public function offsetGet($offset)
 	{
-		return isset($this->container[$offset]) ? $this->container[$offset] : null;
+		return isset($this->_data[$offset]) ? $this->_data[$offset] : null;
 	}
 
 	/**

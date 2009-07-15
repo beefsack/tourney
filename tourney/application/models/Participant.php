@@ -147,6 +147,13 @@ class Model_Participant
 	public function save()
 	{
 		// @todo write save
+		/*
+		 * A simple save, but should check that there is a matchid before it is saved
+		 * No point in having a participant without a parent match for it to participate in
+		 * Throw exceptions if it is missing required data, don't want to be inserting corrupt stuff into the database
+		 * If there is an $_id already that means it is already in the database, so just use update
+		 * Otherwise, use insert
+		 */
 		return $this;
 	}
 	

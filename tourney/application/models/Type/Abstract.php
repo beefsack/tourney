@@ -74,6 +74,14 @@ abstract class Model_Type_Abstract
 		return $this;
 	}
 	
+	static public function factory($index)
+	{
+		// @todo write factory
+		/*
+		 * factory finds out what sort of tournament has an id of $index, then creates a new tournament of that type and loads it
+		 */
+	}
+	
 	/**
 	 * Gets the game for the tourney
 	 * @return Model_Game

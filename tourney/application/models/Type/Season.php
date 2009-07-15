@@ -2,6 +2,11 @@
 
 class Model_Type_Season extends Model_Type_Abstract implements Model_Treeable, Model_Ladderable
 {
+	// The ladder info for this object
+	protected $_ladder;
+	// The tree for the elimination
+	protected $_tree;
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#_buildTourney()

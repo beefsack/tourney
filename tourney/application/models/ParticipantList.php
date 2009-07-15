@@ -110,6 +110,9 @@ class Model_ParticipantList implements Iterator
 	public function save()
 	{
 		// @todo write save
+		/*
+		 * A simple loop through all the items in $_list and calling save on each one
+		 */
 		return $this;
 	}
 	

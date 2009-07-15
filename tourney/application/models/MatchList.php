@@ -112,6 +112,9 @@ class Model_MatchList implements Iterator
 	public function save()
 	{
 		// @todo write save
+		/*
+		 * Calls save on each of the Model_Matches inside $_list
+		 */
 		return $this;
 	}
 	

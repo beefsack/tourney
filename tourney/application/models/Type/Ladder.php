@@ -2,6 +2,9 @@
 
 class Model_Type_Ladder extends Model_Type_Abstract implements Model_Ladderable
 {
+	// The ladder info for this object
+	protected $_ladder;
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#_buildTourney()
