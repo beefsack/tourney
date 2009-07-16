@@ -108,6 +108,7 @@ abstract class Model_Type_Abstract
 	 */
 	public function getMatchList()
 	{
+		$this->_buildTourney();
 		return $this->_matchList;
 	}
 	
@@ -192,6 +193,7 @@ abstract class Model_Type_Abstract
 		 * Because of this, another function called saveMatches() is called and tourneys can override it if neccessary
 		 */
 		$this->_saveMatches();
+		$this->_dirty = false; // It has just been saved, it's not dirty anymore
 		return $this;
 	}
 	
@@ -219,6 +221,7 @@ abstract class Model_Type_Abstract
 	public function setMatchuptype(Model_Matchuptype_Abstract $matchupType)
 	{
 		$this->_matchuptype = get_class($matchupType);
+		$this->_dirty = true;
 		return $this;
 	}
 }

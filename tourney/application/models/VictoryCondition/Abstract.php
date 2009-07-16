@@ -7,5 +7,5 @@ abstract class Model_VictoryCondition_Abstract
 	 * @param Model_ParticipantList $participantlist List of participants along with scores.  Blank score is assumed to be 0
 	 * @return Model_ParticipantList
 	 */
-	abstract public function &getStandings(Model_ParticipantList &$participantlist);
+	abstract public function getStandings(Model_ParticipantList $participantlist);
 }
