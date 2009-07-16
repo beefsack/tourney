@@ -99,31 +99,29 @@ class Model_TreeType
 	}
 	
 	/**
-	 * Set the left node
-	 * @param $data The data to be held in the left node
+	 * Sets the left node
+	 * @param TreeType $node The node to set
 	 * @return $this
 	 */
-	public function setLeft(&$data)
+	public function setLeft(TreeType $node)
 	{
 		// @todo Write setLeft
 		/*
-		 * Sets the left node to $data.
-		 * Notice the &, making it a reference
+		 * Sets the left node to $node.
 		 */
 		return $this;
 	}
 	
 	/**
-	 * Set the right node
-	 * @param $data The data to be held in the right node
+	 * Sets the right node
+	 * @param TreeType $node The node to set
 	 * @return $this
 	 */
-	public function setRight(&$data)
+	public function setRight(TreeType $node)
 	{
 		// @todo Write setRight
 		/*
-		 * Sets the right node to $data.
-		 * Notice the &, making it a reference
+		 * Sets the right node to $node.
 		 */
 		return $this;
 	}

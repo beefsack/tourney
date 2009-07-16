@@ -34,7 +34,8 @@ class Model_Type_DoubleElimination extends Model_Type_Abstract implements Model_
 			 * The sourcetype will be 'winner' or 'loser'
 			 * Before there is an id for a match, probably a reference to the match object can be stored.  After that match is saved then the id can be extracted from the reference
 			 * This means all saving should be done from the tree, in a bottom up fashion.  All lower nodes need to be saved before any higher nodes can be saved
-			 * In a similar fashion, because the right tree depends on the left tree, the left tree has to be saved before the right tree. 
+			 * In a similar fashion, because the right tree depends on the left tree, the left tree has to be saved before the right tree.
+			 * PHP makes this a lot easier because, like Java, if you do oneObject = anotherObject it always assigns by reference not copy.  So you can have a match in both the winner tree and the loser tree, and when it saves the ID will be available from both sides. 
 			 */
 			$this->_dirty = false;
 		}
@@ -43,6 +44,18 @@ class Model_Type_DoubleElimination extends Model_Type_Abstract implements Model_
 	protected function _saveMatches()
 	{
 		// @todo write _saveMatches for DoubleElimination
+		/*
+		 * Instead of just saving the list of matches like is standard for tourneys, elimination style tournaments have a complex structure
+		 * Because a match node in the tree depends on the result of the matches below it, the tree needs to be saved from the bottom up.
+		 * If the $_dataObject['source'] is a Model_Match object, it will save the source as the ->getId() of that object
+		 * So the pseudocode will be something like
+		 * Call saverecursivefunction on the root node
+		 * saverecursivefunction:
+		 * if left branch isn't null, call saverecursivefunction on the left branch (bottom up, each branch is called before doing this node)
+		 * if the right branch isn't null, call the saverecursivefunction on the right branch (occurs after left branch so the loser branch has a source for its games)
+		 * if $_dataObject['source'] is a Model_Match object, set $_dataObject['source'] to that Model_Match->getId()
+		 * Save the match in this node
+		 */
 	}
 	
 	/**

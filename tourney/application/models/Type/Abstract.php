@@ -55,6 +55,14 @@ abstract class Model_Type_Abstract
 	}
 	
 	/**
+	 * Loads the match list
+	 */
+	protected function _loadMatches()
+	{
+		$this->_matchList->load($this->_id);
+	}
+	
+	/**
 	 * Saves the match list
 	 */
 	protected function _saveMatches()
@@ -148,6 +156,7 @@ abstract class Model_Type_Abstract
 		 * See the user class for how to fetch using Zend_Db (user load has been written already)
 		 * Then loads all matches for the tourney by making a new Model_Match passing the match id to the constructor.  The loaded match can then be added to the matchlist
 		 */
+		$this->_loadMatches();
 		$this->_dirty = false; // Since it is a fresh load, it isn't dirty
 		return $this;
 	}
