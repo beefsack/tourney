@@ -84,6 +84,10 @@ class TestController extends Zend_Controller_Action
     
     public function treereftestAction()
     {
+    	echo (pow(2, ceil(log(29, 2)))) . "<br />";
+    	for ($i = 1; $i < 64; $i++) {
+    		echo $i . ":" . ceil(log($i, 2)) . ":" . pow(2, ceil(log($i, 2))) . "<br />";
+    	}
     	// first test
     	//$egg = new bacon();
     	$dog = 2;
