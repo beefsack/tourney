@@ -6,7 +6,7 @@ class Zend_View_Helper_PrintMatches extends Zend_View_Helper_Abstract
 {
 	public function printMatches(Model_MatchList $matches)
 	{
-		echo "<div class=\"tree\">\n";
+		echo "<div class=\"matchlist\">\n";
 		echo "SOMESHIT\n";
 		echo "</div>\n";
 	}
