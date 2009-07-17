@@ -28,4 +28,4 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
     	date_default_timezone_set('UTC');
     }
-}
+   }

@@ -13,6 +13,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 	{
 		if ($this->_dirty) {
 			$this->_matchList->clearMatchList();
+			$this->_tree = new Model_TreeType();
 			// Rebuild the tournament from scratch
 			// @todo write _buildTourney for SingleElimination
 			/*
