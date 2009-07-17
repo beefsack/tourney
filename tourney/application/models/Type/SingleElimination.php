@@ -94,6 +94,11 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		}
 	}
 	
+	protected function _createTree(array $matchups)
+	{
+		
+	}
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#_loadMatches()
@@ -133,6 +138,11 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		 */
 	}
 	
+	public function getMatchupType()
+	{
+		return $this->_dataObject['matchuptype'];
+	}
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Model_Treeable#getTree()
@@ -150,5 +160,10 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 	public function getTypeName()
 	{
 		return "Single Elimination";
+	}
+	
+	public function setMatchupType(Model_MatchupType_Abstract $matchup)
+	{
+		$this->_dataObject['matchuptype'] = get_class($matchup);
 	}
 }
