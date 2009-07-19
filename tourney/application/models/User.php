@@ -15,7 +15,7 @@ class Model_User implements Model_Participantable
 	 */
 	public function __toString()
 	{
-		return $this->_name();
+		return $this->_name;
 	}
 	
 	/**

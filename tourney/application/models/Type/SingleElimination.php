@@ -117,12 +117,12 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 			// First recurse the left subtree
 			$left = $this->_createTree(array_slice($matchups, 0, $splitPoint));
 			if ($left instanceof Model_TreeType) {
-				echo "LEFT IS A NODE<br />";
 				// Left is a node, add it as a child of this node and set up participants
 				$node->setLeft($left);
 				$participant = new Model_Participant();
 				$participant->setData('source', $left->data());
 				$participant->setData('sourcetype', 'winner');
+				$match->addParticipant($participant);
 			} elseif ($left instanceof Model_Participant) {
 				// Left is a participant, so just add it to this match
 				$match->addParticipant($left);
@@ -130,13 +130,14 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 				throw new Exception("_createTree returned value which is neither Model_TreeType or Model_Participant");
 			}
 			// Then recurse the right subtree in the same way
-			$right = $this->_createTree(array_slice($matchups, 0, $splitPoint));
+			$right = $this->_createTree(array_slice($matchups, $splitPoint));
 			if ($right instanceof Model_TreeType) {
 				// Right is a node, add it as a child of this node and set up participants
 				$node->setLeft($right);
 				$participant = new Model_Participant();
 				$participant->setData('source', $right->data());
 				$participant->setData('sourcetype', 'winner');
+				$match->addParticipant($participant);
 			} elseif ($right instanceof Model_Participant) {
 				// Right is a participant, so just add it to this match
 				$match->addParticipant($right);
@@ -159,6 +160,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 				} elseif ($num == 1) {
 					// Because this matchup only has one participant, we automatically move it up the tree
 					unset($match);
+					unset($node);
 					return $m[0];
 				} else {
 					throw new Exception("Found empty matchup");

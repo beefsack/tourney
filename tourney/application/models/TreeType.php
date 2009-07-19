@@ -6,10 +6,10 @@ class Model_TreeType
 	private $_data;
 	
 	// $_leftNode is the left node.  isset($_leftNode) will be false if no node is set
-	private $_leftNode;
+	private $_left;
 	
 	// $_rightNode is the right node.  isset($_rightNode) will be false if no node is set
-	private $_rightNode;
+	private $_right;
 	
 	/**
 	 * Counts leaves below this node
@@ -49,7 +49,7 @@ class Model_TreeType
 	 * Get the data contained in this node
 	 * @return Mixed
 	 */
-	public function data()
+	public function &data()
 	{
 		return $this->_data;
 	}
@@ -60,7 +60,7 @@ class Model_TreeType
 	 */
 	public function &left()
 	{
-		return $this->_leftNode;
+		return $this->_left;
 	}
 	
 	/**
@@ -80,7 +80,7 @@ class Model_TreeType
 	 */
 	public function &right()
 	{
-		return $this->_rightNode;
+		return $this->_right;
 	}
 	
 	/**

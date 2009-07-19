@@ -30,7 +30,7 @@ class Model_Participant
 				return (string) $participant;				
 			}
 		} else {
-			return $this->_dataObject['sourcetype'];
+			return "WINNER";
 		}
 	}
 	
@@ -200,7 +200,7 @@ class Model_Participant
 	 */
 	public function setData($offset, $value)
 	{
-		$this->_dataObject['offset'] = $value;
+		$this->_dataObject[$offset] = $value;
 		return $this;
 	}
 
