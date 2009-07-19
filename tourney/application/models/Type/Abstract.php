@@ -55,6 +55,22 @@ abstract class Model_Type_Abstract
 	}
 	
 	/**
+	 * Gets the actual matchup object populated with the participant list
+	 * @return Model_MatchupType_Abstract
+	 */
+	protected function _getMatchupObject()
+	{
+		if (isset($this->_matchuptype)) {
+			$obj = new $this->_matchuptype;
+			if ($obj instanceof Model_MatchupType_Abstract) {
+				$obj->addParticipant($this->_participantList);
+				return $obj;
+			}
+		}
+		return NULL;
+	}
+	
+	/**
 	 * Loads the match list
 	 */
 	protected function _loadMatches()
@@ -111,7 +127,7 @@ abstract class Model_Type_Abstract
 		$this->_buildTourney();
 		return $this->_matchList;
 	}
-	
+
 	/**
 	 * Returns the Model_MatchupType class name
 	 * @return string

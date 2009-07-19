@@ -90,11 +90,7 @@ class Model_TreeType
 	 */
 	public function setData(&$data)
 	{
-		// @todo write setData
-		/*
-		 * Easy, just sets the data of this node to $data
-		 * Make sure to use the reference assignment =& instead of the normal copy assignment =
-		 */
+		$this->_data =& $data;
 		return $this;
 	}
 	
@@ -103,12 +99,9 @@ class Model_TreeType
 	 * @param TreeType $node The node to set
 	 * @return $this
 	 */
-	public function setLeft(TreeType $node)
+	public function setLeft(Model_TreeType $node)
 	{
-		// @todo Write setLeft
-		/*
-		 * Sets the left node to $node.
-		 */
+		$this->_left = $node;
 		return $this;
 	}
 	
@@ -117,12 +110,9 @@ class Model_TreeType
 	 * @param TreeType $node The node to set
 	 * @return $this
 	 */
-	public function setRight(TreeType $node)
+	public function setRight(Model_TreeType $node)
 	{
-		// @todo Write setRight
-		/*
-		 * Sets the right node to $node.
-		 */
+		$this->_right = $node;
 		return $this;
 	}
 	

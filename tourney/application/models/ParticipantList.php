@@ -19,7 +19,35 @@ class Model_ParticipantList implements Iterator
 		 * Class type can be checked like this: if ($participant instanceof Model_Participant) {
 		 * If $participant is not a Model_Participant or Model_ParticipantList, a new exception should be thrown
 		 */
+		if ($participant instanceof Model_Participant) {
+			$found = false;
+			foreach ($this->_list as $p) {
+				if ($participant->getType() == $p->getType()
+				&& $participant->getParticipantid() == $p->getParticipantid()) {
+					$found = true;
+					break;
+				}
+			}
+			if (!$found) {
+				$this->_list[] = $participant;
+			}
+		} elseif ($participant instanceof Model_ParticipantList) {
+			foreach ($participant as $p) {
+				$this->addParticipant($p);
+			}
+		} else {
+			throw new Exception("Non Model_Participant passed to addParticipant");
+		}
 		return $this;
+	}
+	
+	/**
+	 * Returns the number of participants in this list
+	 * @return integer
+	 */
+	public function numParticipants()
+	{
+		return count($this->_list);
 	}
 	
 	/**

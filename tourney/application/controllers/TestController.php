@@ -65,7 +65,7 @@ class TestController extends Zend_Controller_Action
     	$game->save(); // Will throw an exception if any one of name, description or scoringtype isn't set
     	$eggtourney->setGame($game); // Set the game type of the tourney to this new game.  It's also possible to pass an integer to setGame equivalent to the game id in the database
     	// Now we will set the matchup type for the tournament
-    	$eggtourney->setMatchuptype(new Model_MatchupType_Random());
+    	$eggtourney->setMatchuptype(new Model_MatchupType_Order());
     	// Now make a list of participants for the tourney
     	$participantlist = new Model_ParticipantList(); // Create a participant list so we can add participants to it.  A participant list is a fancy array.
     	// You can make a participant out of anything!  As long as it implements Model_Participantable (lol)
@@ -75,7 +75,13 @@ class TestController extends Zend_Controller_Action
     	$participant->set($user);
     	$eggtourney->addParticipant($participant);
     	// Lets add one more
+    	$participant = new Model_Participant();
     	$user = new Model_User('baconheist');
+    	$participant->set($user);
+    	$eggtourney->addParticipant($participant);
+    	// Lets add one more
+    	$participant = new Model_Participant();
+    	$user = new Model_User('test1');
     	$participant->set($user);
     	$eggtourney->addParticipant($participant);
     	// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.

@@ -21,6 +21,19 @@ class Model_Participant
 	// type of participant (Model_User or Model_Team) = db type column
 	protected $_type;
 	
+	public function __toString()
+	{
+		if (isset($this->_type) && isset($this->_participantid)) {
+			$participant = new $this->_type;
+			if ($participant instanceof Model_Participantable) {
+				$participant->load($this->_participantid);
+				return (string) $participant;				
+			}
+		} else {
+			return $this->_dataObject['sourcetype'];
+		}
+	}
+	
 	/**
 	 * Singleton method to get the participant table class
 	 * @return Model_DbTable_Participant
@@ -138,6 +151,14 @@ class Model_Participant
 		 * The participant table has a data column, and the data from that column should be loaded into the $_dataObject using load
 		 */
 		return $this;
+	}
+	
+	function Participant($index)
+	{
+		$this->_dataObject = new Model_TourneyData();
+		if ($index > 0) {
+			$this->load($index);
+		}
 	}
 	
 	/**

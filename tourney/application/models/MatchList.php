@@ -79,6 +79,15 @@ class Model_MatchList implements Iterator
 	}
 	
 	/**
+	 * Returns the number of matches in this list
+	 * @return integer
+	 */
+	public function numMatches()
+	{
+		return count($this->_list);
+	}
+	
+	/**
 	 * Remove the specified matches from the list, if they exists
 	 * @param $match Model_Match or Model_MatchList to remove from the list.
 	 * @return $this

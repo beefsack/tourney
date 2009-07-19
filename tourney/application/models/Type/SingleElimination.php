@@ -90,13 +90,83 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 			 * I reckon we should make the game in the root node have an extra piece of data in the dataObject saying nodetype:root; or something.
 			 * Just having that makes the root node easy to find for the load function, cos the load function can start with the root and cascade down to make it easier
 			 */
+			// First, get the matchups from the matchup object
+			if (($matchupObj = $this->_getMatchupObject()) !== NULL) {
+				$matchups = $matchupObj->getMatchups();
+			} else {
+				throw new Exception("Unable to instantiate matchup object of type ".$this->getMatchuptype());
+			}
+			// Now build the match tree, which is done recursively
+			$this->_tree = $this->_createTree($matchups);
 			$this->_dirty = false;
 		}
 	}
 	
 	protected function _createTree(array $matchups)
 	{
-		
+		// Make a node for this point in the tree
+		$node = new Model_TreeType();
+		// Make the match for this node and set it
+		$match = new Model_Match();
+		$node->setData($match);
+		// Find out how many matchups are left, and handle differently for 1 or more
+		$num = count($matchups);
+		if ($num > 1) {
+			// There is more than 1 matchup so we will need to recurse
+			$splitPoint = ceil($num / 2);
+			// First recurse the left subtree
+			$left = $this->_createTree(array_slice($matchups, 0, $splitPoint));
+			if ($left instanceof Model_TreeType) {
+				echo "LEFT IS A NODE<br />";
+				// Left is a node, add it as a child of this node and set up participants
+				$node->setLeft($left);
+				$participant = new Model_Participant();
+				$participant->setData('source', $left->data());
+				$participant->setData('sourcetype', 'winner');
+			} elseif ($left instanceof Model_Participant) {
+				// Left is a participant, so just add it to this match
+				$match->addParticipant($left);
+			} else {
+				throw new Exception("_createTree returned value which is neither Model_TreeType or Model_Participant");
+			}
+			// Then recurse the right subtree in the same way
+			$right = $this->_createTree(array_slice($matchups, 0, $splitPoint));
+			if ($right instanceof Model_TreeType) {
+				// Right is a node, add it as a child of this node and set up participants
+				$node->setLeft($right);
+				$participant = new Model_Participant();
+				$participant->setData('source', $right->data());
+				$participant->setData('sourcetype', 'winner');
+			} elseif ($right instanceof Model_Participant) {
+				// Right is a participant, so just add it to this match
+				$match->addParticipant($right);
+			} else {
+				throw new Exception("_createTree returned value which is neither Model_TreeType or Model_Participant");
+			}
+			// Now this node is set up, we return it
+			return $node;
+		} elseif ($num == 1) {
+			// There is one matchup which makes a match.
+			// Now we need to check if there is one or more participant, because each case is handled differently
+			foreach ($matchups as $m) { // This will only run once, but we need to use it because we don't know the key of the array item we need
+				$num = count($m);
+				if ($num > 1) {
+					// Go through each participant in the matchup and add it to the match
+					foreach ($m as $p) {
+						$match->addParticipant($p);
+					}
+					return $node;
+				} elseif ($num == 1) {
+					// Because this matchup only has one participant, we automatically move it up the tree
+					unset($match);
+					return $m[0];
+				} else {
+					throw new Exception("Found empty matchup");
+				}
+			}
+		} else {
+			throw new Exception("_createTree called with empty array");
+		}
 	}
 	
 	/**
@@ -138,11 +208,6 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		 */
 	}
 	
-	public function getMatchupType()
-	{
-		return $this->_dataObject['matchuptype'];
-	}
-	
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Model_Treeable#getTree()
@@ -160,10 +225,5 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 	public function getTypeName()
 	{
 		return "Single Elimination";
-	}
-	
-	public function setMatchupType(Model_MatchupType_Abstract $matchup)
-	{
-		$this->_dataObject['matchuptype'] = get_class($matchup);
 	}
 }

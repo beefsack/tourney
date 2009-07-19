@@ -5,6 +5,11 @@ abstract class Model_MatchupType_Abstract
 	// List of participants
 	protected $_participantList;
 	
+	protected function _getNextPowerOfTwo($value)
+	{
+		return pow(2, ceil(log($value, 2)));
+	}
+	
 	/**
 	 * Adds participants to the participant list
 	 * @param $participant A Model_Participant or Model_ParticipantList to add
@@ -58,6 +63,15 @@ abstract class Model_MatchupType_Abstract
 	function Model_MatchupType_Abstract()
 	{
 		$this->_participantList = new Model_ParticipantList();
+	}
+	
+	/**
+	 * Finds the number of matches required to neatly fit in to a tree
+	 * @return integer
+	 */
+	protected function _numMatchesRequired()
+	{
+		return $this->_getNextPowerOfTwo($this->_participantList->numParticipants() / 2);
 	}
 	
 	/**

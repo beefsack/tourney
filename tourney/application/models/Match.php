@@ -21,6 +21,15 @@ class Model_Match
 	// Parent tournament tourneyid = db tourneyid column
 	protected $_tourneyid;
 	
+	public function __toString()
+	{
+		$str = "";
+		foreach ($this->_participantList as $p) {
+			$str .= $p;
+		}
+		return $str;
+	}
+	
 	/**
 	 * Singleton method to get the match table class
 	 * @return Model_DbTable_Match
