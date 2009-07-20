@@ -64,6 +64,12 @@ class TestController extends Zend_Controller_Action
     	$this->view->tourneyTree = $eggtourney->getTree();
     }
     
+public function createandsavegameAction()
+    {
+    	$fart = new Model_Game(2);
+		echo $fart->getId();
+     }
+    
     public function treereftestAction()
     {
     	echo (pow(2, ceil(log(29, 2)))) . "<br />";
@@ -82,6 +88,7 @@ class TestController extends Zend_Controller_Action
     	$fart3 = $fart2;
     	$fart3->setData('1','2');
     	echo $fart2->getData('1')."<br />";
+    	
     }
     
     public function loadtournamentAction()

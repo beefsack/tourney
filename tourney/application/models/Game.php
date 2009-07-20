@@ -29,7 +29,7 @@ class Model_Game
 	 * Constructor
 	 * @param $index Index of game to load
 	 */
-	function Game($index = 0)
+	function Model_Game($index = 0)
 	{
 		if ($index > 0) {
 			$this->load($index);
@@ -76,13 +76,20 @@ class Model_Game
 	 * Load a game from the database
 	 * @param $index Index of game to load
 	 */
-	public function load($index)
+	public function load($id)
 	{
-		// @todo write load
-		/*
-		 * This one is simple, just a plain load from the game table with no sub objects to load
-		 * An example of a simple object load from the database is in the User class
-		 */
+		// Reference on select objects and executing them: http://zendframework.com/manual/en/zend.db.select.html
+		$select = $this->_getTable()->select()->where('id = ?', $id);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if (!$result) {
+			throw new Exception("id '$id' not found");
+		}
+		$this->_id = $result['id'];
+		$this->_name = $result['name'];
+		$this->_description = $result['description'];
+		$this->_scoringtype = $result['scoringtype'];	
+		return $this;			
 	}
 	
 	public function save()
