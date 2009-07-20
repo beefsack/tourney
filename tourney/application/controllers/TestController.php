@@ -94,5 +94,6 @@ public function createandsavegameAction()
     
     public function loadtournamentAction()
     {
+    	// Test load tournament
     }
 }
