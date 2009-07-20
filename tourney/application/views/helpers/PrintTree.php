@@ -6,9 +6,6 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 {
 	public function printTree(Model_TreeType $tree)
 	{
-		/*echo "<div class=\"tree\">\n";
-		echo "SOMESHIT\n";
-		echo "</div>\n";*/
 		echo $this->_stepTree($tree);
 	}
 	
@@ -29,5 +26,6 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 			$str .= $this->_stepTree($tree->right());
 			$str .= "</div>\n";
 		}
+		return $str;
 	}
 }

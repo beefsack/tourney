@@ -61,6 +61,7 @@ class TestController extends Zend_Controller_Action
     	$eggtourney->addParticipant($participant);
     	// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
     	$eggtourney->save();
+    	
     	$this->view->tourneyTree = $eggtourney->getTree();
     }
     
