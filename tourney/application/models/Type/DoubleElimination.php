@@ -1,10 +1,7 @@
 <?php
 
-class Model_Type_DoubleElimination extends Model_Type_Abstract implements Model_Treeable
+class Model_Type_DoubleElimination extends Model_Type_SingleElimination
 {
-	// The tree for the elimination
-	protected $_tree;
-	
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#_buildTourney()
@@ -12,9 +9,8 @@ class Model_Type_DoubleElimination extends Model_Type_Abstract implements Model_
 	protected function _buildTourney()
 	{
 		if ($this->_dirty) {
-			// First reset the current match list, we're gonna make a new one
 			$this->_matchList->clearMatchList();
-			// @todo write _buildTourney for DoubleElimination
+			$this->_tree = new Model_TreeType();
 			/*
 			 * One of the big pieces of code for this project for the most complicated of the two tree based structures
 			 * There are two options, one would to be to just store the matches in a TreeType object, the other would to store it both in a TreeType and a MatchList
@@ -37,35 +33,16 @@ class Model_Type_DoubleElimination extends Model_Type_Abstract implements Model_
 			 * In a similar fashion, because the right tree depends on the left tree, the left tree has to be saved before the right tree.
 			 * PHP makes this a lot easier because, like Java, if you do oneObject = anotherObject it always assigns by reference not copy.  So you can have a match in both the winner tree and the loser tree, and when it saves the ID will be available from both sides. 
 			 */
+			// First, get the matchups from the matchup object
+			if (($matchupObj = $this->_getMatchupObject()) !== NULL) {
+				$matchups = $matchupObj->getMatchups();
+			} else {
+				throw new Exception("Unable to instantiate matchup object of type ".$this->getMatchuptype());
+			}
+			// Now build the match tree, which is done recursively
+			$this->_tree = $this->_createTree($matchups);
 			$this->_dirty = false;
 		}
-	}
-	
-	protected function _saveMatches()
-	{
-		// @todo write _saveMatches for DoubleElimination
-		/*
-		 * Instead of just saving the list of matches like is standard for tourneys, elimination style tournaments have a complex structure
-		 * Because a match node in the tree depends on the result of the matches below it, the tree needs to be saved from the bottom up.
-		 * If the $_dataObject['source'] is a Model_Match object, it will save the source as the ->getId() of that object
-		 * So the pseudocode will be something like
-		 * Call saverecursivefunction on the root node
-		 * saverecursivefunction:
-		 * if left branch isn't null, call saverecursivefunction on the left branch (bottom up, each branch is called before doing this node)
-		 * if the right branch isn't null, call the saverecursivefunction on the right branch (occurs after left branch so the loser branch has a source for its games)
-		 * if $_dataObject['source'] is a Model_Match object, set $_dataObject['source'] to that Model_Match->getId()
-		 * Save the match in this node
-		 */
-	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see models/Model_Treeable#getTree()
-	 */
-	public function getTree()
-	{
-		$this->_buildTourney();
-		return $this->_tree;
 	}
 	
 	/**

@@ -1,30 +1,5 @@
 <?php
 
-    class bacon
-    {
-    	protected $_data;
-    	
-    	function bacon(&$data = NULL)
-    	{
-    		if ($data !== NULL) {
-    			$this->steak($data);
-    		}
-    	}
-    	
-    	function steak(&$thing)
-    	{
-    		echo "value of thing is $thing<br />";
-    		$this->_data =& $thing;
-    		echo "value of data is $this->_data<br />"; 
-    	}
-    	
-    	function __toString()
-    	{
-    		echo "returning thing value ".$this->_data."<br />";
-    		return (string) $this->_data;
-    	}
-    }
-    
 class TestController extends Zend_Controller_Action
 {
 
@@ -95,13 +70,6 @@ class TestController extends Zend_Controller_Action
     	for ($i = 1; $i < 64; $i++) {
     		echo $i . ":" . ceil(log($i, 2)) . ":" . pow(2, ceil(log($i, 2))) . "<br />";
     	}
-    	// first test
-    	//$egg = new bacon();
-    	$dog = 2;
-    	//$egg->steak($dog);
-    	$egg = new bacon($dog);
-    	$dog = 5;
-    	echo "$egg<br />";
     	// second test
     	$toss = new Model_MatchList();
     	$fart = new Model_Match();
