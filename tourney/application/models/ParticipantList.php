@@ -92,6 +92,9 @@ class Model_ParticipantList implements Iterator
 		 * Once that is found, need to loop through each and create a new Model_Participant object for each loading the relevant participant id
 		 * After creating each Model_Participant object and loading it, it is added to the array using addParticipant of this object
 		 */
+		
+		
+		
 		return $this;
 	}
 		

@@ -155,7 +155,7 @@ class Model_Match
 	 * @param $index Index of match to load
 	 * @return $this
 	 */
-	public function load($index)
+	public function load($id)
 	{
 		// @todo write load
 		/*
@@ -165,6 +165,19 @@ class Model_Match
 		 * after loading the match successfully, it will need to load the participants
 		 * for loading the participants, the Model_ParticipantList has a method for this.  You can call load and pass the id of this match
 		 */
+		
+		$select = $this->_getTable()->select()->where('id = ?', $id);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if (!$result) {
+			throw new Exception("id '$id' not found");
+		}
+		$this->_id = $result['id'];
+		$this->_gameid = $result['gameid'];
+		$this->_scheduletime = $result['scheduletime'];
+		$this->_playtime = $result['playtime'];
+		$this->_data = $result['data'];	
+		echo $this->_id;
 		return $this;
 	}
 	

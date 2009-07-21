@@ -67,8 +67,14 @@ class TestController extends Zend_Controller_Action
     
 public function createandsavegameAction()
     {
-    	$fart = new Model_Game(2);
-		echo $fart->getId();
+    	$newgame = new Model_Game(2);
+		echo $newgame->getId();
+     }
+     
+public function createandsavematchAction()
+    {
+    	$newmatch = new Model_Match(11);
+		echo $newmatch->getId();
      }
     
     public function treereftestAction()
