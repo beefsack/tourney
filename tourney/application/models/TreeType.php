@@ -17,7 +17,6 @@ class Model_TreeType
 	 */
 	public function countLeaves()
 	{
-		// @todo Write countLeaves
 		/*
 		 * countLeaves should be implemented recursively
 		 * A TreeType object is a leaf if isset(left()) and isset(right()) are false
@@ -27,7 +26,18 @@ class Model_TreeType
 		 * if left and right are both not set, set total to 1
 		 * return total
 		 */
-		return $count;
+		$leaves = 0;
+		if ($this->_left === NULL && $this->_right === NULL) {
+			$leaves = 1;
+		} else {
+			if ($this->_left !== NULL && $this->_left instanceof Model_TreeType) {
+				$leaves += $this->_left->countLeaves();
+			}
+			if ($this->_right !== NULL && $this->_right instanceof Model_TreeType) {
+				$leaves += $this->_right->countLeaves();
+			}
+		}
+		return $leaves;
 	}
 	
 	/**
@@ -122,7 +132,6 @@ class Model_TreeType
 	 */
 	public function treeDepth()
 	{
-		// @todo Write treeDepth
 		/*
 		 * This finds how deep the tree goes.  That would be massively useful for finding alignments for outputting a tree as an image, or maybe with css.
 		 * treeDepth should be implemented recursively
@@ -130,6 +139,14 @@ class Model_TreeType
 		 * return the maximum of (left node->treeDepth + 1, right node->treeDepth + 1)
 		 * That would recurse through every single node, but would only return the deepest one
 		 */
-		return $depth;
+		//echo "calling depth";
+		$depth = 0;
+		if ($this->_left !== NULL && $this->_left instanceof Model_TreeType) {
+			$depth = $this->_left->treeDepth();
+		}
+		if ($this->_right !== NULL && $this->_right instanceof Model_TreeType) {
+			$depth = max($depth, $this->_right->treeDepth());
+		}
+		return ++$depth;
 	}	
 }

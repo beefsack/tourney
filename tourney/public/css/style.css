@@ -38,7 +38,6 @@ body
 
 }
 
-
 h1
 {
 	color:#854040;
@@ -54,3 +53,119 @@ h1
 	font-size:small;
 }
 	
+/* TREE STUFF */
+
+.tree,
+.treecontainer,
+.treecol,
+.treespacer,
+.treematchholder,
+.treematch,
+.treehline,	
+.treeupbranchline,
+.treedownbranchline,
+.treeparticipant {
+	border: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.tree {
+	overflow: auto;
+}
+
+.treecontainer {
+	float: left;
+	clear: both;
+}
+
+.treematchholder {
+	height: 100px;
+	width: 100px;
+	float: right;
+	clear: both;
+}
+
+.treeverthax {
+	position: relative;
+	top: 50%;
+}
+
+.treematch {
+	position: relative;
+	top: -20px;
+	width: 100%;
+}
+
+.treematchinfo, .treeparticipant {
+	width: 100%;
+	float: right;
+	clear: both;
+	text-align: center;
+	font-size: 8pt;
+	font-family: sans-serif;
+}
+
+.treematchinfo {
+	background-color: #444444;
+	color: #FFFFFF;
+	border-bottom: 1px solid black;
+}
+
+.treeparticipant {
+	background-color: #B8B8B8;
+	white-space: nowrap;
+	overflow: hidden;
+	max-width: 100%;
+}
+
+.treeparticipantname {
+	float: left;
+}
+
+.treeparticipantscore {
+	float: right;
+	text-align: right;
+}
+
+.treewinner {
+	background-color: #C5FFBB;
+}
+
+.treeloser {
+	background-color: #FFBBBB;
+}
+
+.treecol {
+	float: right;
+}
+
+.treespacer {
+	float: right;
+	clear: both;
+}
+
+.treehline {
+	width: 50px;
+	border-bottom: 1px dotted black;
+	float: right;
+	clear: both;
+}
+
+.treeupbranchline {
+	width: 50px;
+	border-top: 1px dotted black;
+	border-right: 1px dotted black;
+	float: right;
+	clear: both;
+}
+
+.treedownbranchline {
+	width: 50px;
+	border-bottom: 1px dotted black;
+	border-right: 1px dotted black;
+	float: right;
+	clear: both;
+}
+
+/* END TREE STUFF */

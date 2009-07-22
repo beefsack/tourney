@@ -59,6 +59,31 @@ class TestController extends Zend_Controller_Action
     	$user = new Model_User('test1');
     	$participant->set($user);
     	$eggtourney->addParticipant($participant);
+    	// Lets add one more
+    	$participant = new Model_Participant();
+    	$user = new Model_User('test2');
+    	$participant->set($user);
+    	$eggtourney->addParticipant($participant);
+    	    	// Lets add one more
+    	$participant = new Model_Participant();
+    	$user = new Model_User('test3');
+    	$participant->set($user);
+    	$eggtourney->addParticipant($participant);
+    	    	// Lets add one more
+    	$participant = new Model_Participant();
+    	$user = new Model_User('test4');
+    	$participant->set($user);
+    	$eggtourney->addParticipant($participant);
+    	    	// Lets add one more
+    	$participant = new Model_Participant();
+    	$user = new Model_User('test5');
+    	$participant->set($user);
+    	$eggtourney->addParticipant($participant);
+    	    	// Lets add one more
+    	$participant = new Model_Participant();
+    	$user = new Model_User('test6');
+    	$participant->set($user);
+    	$eggtourney->addParticipant($participant);
     	// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
     	$eggtourney->save();
     	

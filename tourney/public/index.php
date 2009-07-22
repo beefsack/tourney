@@ -14,6 +14,10 @@ set_include_path(implode(PATH_SEPARATOR, array(
     get_include_path(),
 )));
 
+// Define web path to public directory
+defined('PUBLIC_PATH')
+    || define('PUBLIC_PATH', '/tourney/public');
+
 /** Zend_Application */
 require_once 'Zend/Application.php';  
 
