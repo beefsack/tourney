@@ -56,7 +56,7 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 			}
 			$str .= "<div class=\"treespacer\" style=\"height:" . ($powdepth * $baseHeight / 4) . "px;\"></div>
 </div>
-<div class=\"treecol\">";
+<div class=\"treecol\">\n";
 			if ($tree->left() !== NULL) {
 				$str .= $this->_stepTree($tree->left(), $treeDepth - 1, $blankTree, false, $baseHeight, $baseWidth);
 			} else {
@@ -69,6 +69,7 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 			}
 			$str .= "</div>\n";
 		}
+		$str .= "</div>\n";
 		return $str;
 	}
 }
