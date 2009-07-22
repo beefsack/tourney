@@ -75,7 +75,7 @@ h1
 }
 
 .treecontainer {
-	float: left;
+	float: right;
 	clear: both;
 }
 
@@ -99,6 +99,9 @@ h1
 
 .treematchinfo, .treeparticipant {
 	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	max-width: 100%;
 	float: right;
 	clear: both;
 	text-align: center;
@@ -114,9 +117,6 @@ h1
 
 .treeparticipant {
 	background-color: #B8B8B8;
-	white-space: nowrap;
-	overflow: hidden;
-	max-width: 100%;
 }
 
 .treeparticipantname {

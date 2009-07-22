@@ -23,10 +23,7 @@ class Model_Match
 	
 	public function __toString()
 	{
-		$str = "";
-		foreach ($this->_participantList as $p) {
-			$str .= $p;
-		}
+		$str .= "Match";
 		return $str;
 	}
 	

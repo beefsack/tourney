@@ -11,26 +11,15 @@ class Model_ParticipantList implements Iterator
 	 */
 	public function addParticipant($participant)
 	{
-		// @todo write addParticipant
 		/*
 		 * This adds a Model_Participant or all the Model_Participants in a Model_ParticipantList to the $_list array of this object
-		 * If $participant is a Model_Participant, first it should check if it already exists in $_list, and if not, add it using $_list[]
+		 * If $participant is a Model_Participant, add it using $_list[]
 		 * If $participant is a Model_ParticipantList, loop through each participant in that list and call $this->addParticipant for each one
 		 * Class type can be checked like this: if ($participant instanceof Model_Participant) {
 		 * If $participant is not a Model_Participant or Model_ParticipantList, a new exception should be thrown
 		 */
 		if ($participant instanceof Model_Participant) {
-			$found = false;
-			foreach ($this->_list as $p) {
-				if ($participant->getType() == $p->getType()
-				&& $participant->getParticipantid() == $p->getParticipantid()) {
-					$found = true;
-					break;
-				}
-			}
-			if (!$found) {
-				$this->_list[] = $participant;
-			}
+			$this->_list[] = $participant;
 		} elseif ($participant instanceof Model_ParticipantList) {
 			foreach ($participant as $p) {
 				$this->addParticipant($p);

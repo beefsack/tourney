@@ -64,22 +64,22 @@ class TestController extends Zend_Controller_Action
     	$user = new Model_User('test2');
     	$participant->set($user);
     	$eggtourney->addParticipant($participant);
-    	    	// Lets add one more
+    	// Lets add one more
     	$participant = new Model_Participant();
     	$user = new Model_User('test3');
     	$participant->set($user);
     	$eggtourney->addParticipant($participant);
-    	    	// Lets add one more
+    	// Lets add one more
     	$participant = new Model_Participant();
     	$user = new Model_User('test4');
     	$participant->set($user);
     	$eggtourney->addParticipant($participant);
-    	    	// Lets add one more
+    	// Lets add one more
     	$participant = new Model_Participant();
     	$user = new Model_User('test5');
     	$participant->set($user);
     	$eggtourney->addParticipant($participant);
-    	    	// Lets add one more
+    	// Lets add one more
     	$participant = new Model_Participant();
     	$user = new Model_User('test6');
     	$participant->set($user);

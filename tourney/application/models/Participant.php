@@ -29,8 +29,10 @@ class Model_Participant
 				$participant->load($this->_participantid);
 				return (string) $participant;				
 			}
+		} elseif (isset($this->_dataObject['source'])) {
+			return ucwords($this->_dataObject['sourcetype']) . " of " . $this->_dataObject['source'];
 		} else {
-			return "WINNER";
+			return ".";
 		}
 	}
 	

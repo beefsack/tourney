@@ -15,7 +15,7 @@ class Model_User implements Model_Participantable
 	 */
 	public function __toString()
 	{
-		return $this->_name;
+		return "<a href=\"" . PUBLIC_PATH . "/user/view/id/" . urlencode($this->_name) . "\">" . $this->_name . "</a>";
 	}
 	
 	/**

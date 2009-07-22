@@ -7,32 +7,45 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 	public function printTree(Model_TreeType $tree)
 	{
 		$str .= "<div class=\"tree\">\n";
-		$str .= $this->_stepTree($tree, $tree->treeDepth());
+		$str .= $this->_stepTree($tree);
 		$str .= "</div>\n";
 		echo $str;
 	}
 	
-	protected function _stepTree(Model_TreeType $tree, $treeDepth, $blankTree = false, $root = true, $baseHeight = 100, $baseWidth = 100)
+	protected function _stepTree(Model_TreeType $tree, $treeDepth = 0, $root = true, $baseHeight = 100, $baseWidth = 100)
 	{
+		if ($root) $treeDepth = $tree->treeDepth();
 		$powdepth = pow(2, $treeDepth - 1);
+		$data = $tree->data();
 		$str .= "<div class=\"treecontainer\"";
-		if ($root) $str .= " style=\"width:" . ($treeDepth * $baseWidth * 2 - $baseWidth + $treeDepth) . "px;height:" . ($powdepth * $baseHeight + $powdepth) . "px;\"";
+		if ($root) $str .= " style=\"float:left;width:" . ($treeDepth * $baseWidth * 2 - $baseWidth + $treeDepth) . "px;height:" . ($powdepth * $baseHeight + $powdepth) . "px;\"";
 		$str .= ">
 <div class=\"treecol\">
 <div class=\"treespacer\" style=\"height:" . (($powdepth * $baseHeight - $baseHeight) / 2) . "px;\"></div>
 <div class=\"treematchholder\">
 <div class=\"treeverthax\">
-<div class=\"treematch\">
-<div class=\"treematchinfo\">1/1/1970</div>
-<div class=\"treeparticipant treewinner\">
-<div class=\"treeparticipantname\">mick</div>
-<div class=\"treeparticipantscore\">100000</div>
-</div>
-<div class=\"treeparticipant treeloser\">
-<div class=\"treeparticipantname\">steve</div>
-<div class=\"treeparticipantscore\">1</div>
-</div>
-</div>
+<div class=\"treematch\">\n";
+		if ($data instanceof Model_Match) {
+			$str .= "<div class=\"treematchinfo\">" . $data . "</div>\n";
+			foreach ($data->getParticipantList() as $p) {
+				if ($p instanceof Model_Participant) {
+					$str .= "<div class=\"treeparticipant";
+					$result = $p->getResult();
+					if ($result > 0) {
+						if ($result == 1) {
+							$str .= " treewinner";
+						} else {
+							$str .= " treeloser";
+						}
+					}
+					$str .= "\">\n";
+					$str .= "<div class=\"treeparticipantname\">" . $p . "</div>\n";
+					$str .= "<div class=\"treeparticipantscore\">" . $p->getScore() . "</div>
+</div>\n";
+				}				
+			}
+		}
+		$str .= "</div>
 </div>
 </div>
 <div class=\"treespacer\" style=\"height:" . (($powdepth * $baseHeight - $baseHeight) / 2) . "px;\"></div>
@@ -58,12 +71,12 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 </div>
 <div class=\"treecol\">\n";
 			if ($tree->left() !== NULL) {
-				$str .= $this->_stepTree($tree->left(), $treeDepth - 1, $blankTree, false, $baseHeight, $baseWidth);
+				$str .= $this->_stepTree($tree->left(), $treeDepth - 1, false, $baseHeight, $baseWidth);
 			} else {
 				$str .= "<div class=\"treespacer\" style=\"height:" . ($powdepth * $baseHeight / 2) . "px;\"></div>\n";
 			}
 			if ($tree->right() !== NULL) {
-				$str .= $this->_stepTree($tree->right(), $treeDepth - 1, $blankTree, false, $baseHeight, $baseWidth);
+				$str .= $this->_stepTree($tree->right(), $treeDepth - 1, false, $baseHeight, $baseWidth);
 			} else {
 				$str .= "<div class=\"treespacer\" style=\"height:" . ($powdepth * $baseHeight / 2) . "px;\"></div>\n";
 			}

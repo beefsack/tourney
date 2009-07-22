@@ -133,7 +133,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 			$right = $this->_createTree(array_slice($matchups, $splitPoint));
 			if ($right instanceof Model_TreeType) {
 				// Right is a node, add it as a child of this node and set up participants
-				$node->setLeft($right);
+				$node->setRight($right);
 				$participant = new Model_Participant();
 				$participant->setData('source', $right->data());
 				$participant->setData('sourcetype', 'winner');
