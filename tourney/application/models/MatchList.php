@@ -25,7 +25,8 @@ class Model_MatchList implements Iterator
 		 * If it is a Model_MatchList, it will have to loop through Model_MatchList (using foreach) and add each item individually
 		 * You can check class type like this: if ($match instanceof Model_Match) {
 		 * If it is not a Match or MatchList, it should throw a new exception
-		 */
+		 */ 
+		$_list[] = $match;
 		return $this;
 	}
 	
@@ -73,11 +74,11 @@ class Model_MatchList implements Iterator
 		 * After each Model_Match is created, it should be passed to the addMatch of this class to add it to the array
 		 */
 		$table = new Model_DbTable_Match;
-		$select = $table->select()->where('tourneyid = ?', $id);
+		$select = $table->select()->where('tourneyid = ?', $index);
 		$stmt = $select->query();
 		$result = $stmt->fetch();
 		if (!$result) {
-			throw new Exception("tourneyid '$id' not found");
+			throw new Exception("tourneyid '$index' not found");
 		}
 		$this->_id = $result['id'];
 		$this->_gameid = $result['gameid'];
@@ -86,8 +87,8 @@ class Model_MatchList implements Iterator
 		$this->_dataObject->add($this->_data);
 		$this->_tourneyid = $result['tourneyid'];
 		$newmatch = new Model_Match(id);
-		addMatch($newmatch);	
-		$_list[]=$newmatch;
+		$this->addMatch($newmatch);	
+
 		echo $newmatch->getGameid();
 		return $this;
 	}
