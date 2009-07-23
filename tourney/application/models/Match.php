@@ -23,7 +23,15 @@ class Model_Match
 	
 	public function __toString()
 	{
-		$str .= "Match";
+		$str = "Match ";
+		if (isset($this->_id)) {
+			$url = Zend_View_Helper_Url::url(
+				array('controller' => 'match',
+					'action' => 'view',
+					'id' => $this->_id,
+				), NULL, true);
+			$str = "<a href=\"" . $url . "\">#" . $this->_id . "</a>";
+		}
 		return $str;
 	}
 	

@@ -15,7 +15,12 @@ class Model_User implements Model_Participantable
 	 */
 	public function __toString()
 	{
-		return "<a href=\"" . PUBLIC_PATH . "/user/view/id/" . urlencode($this->_name) . "\">" . $this->_name . "</a>";
+		$url = Zend_View_Helper_Url::url(
+			array('controller' => 'user',
+				'action' => 'view',
+				'id' => $this->_name,
+			), NULL, true);
+		return "<a href=\"" . $url . "\">" . $this->_name . "</a>";
 	}
 	
 	/**
