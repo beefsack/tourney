@@ -80,16 +80,8 @@ class Model_MatchList implements Iterator
 		if (!$result) {
 			throw new Exception("tourneyid '$index' not found");
 		}
-		$this->_id = $result['id'];
-		$this->_gameid = $result['gameid'];
-		$this->_scheduletime = $result['scheduletime'];
-		$this->_data = $result['data'];
-		$this->_dataObject->add($this->_data);
-		$this->_tourneyid = $result['tourneyid'];
-		$newmatch = new Model_Match(id);
-		$this->addMatch($newmatch);	
-
-		echo $newmatch->getGameid();
+		$this->addMatch(new Model_Match($result['id']));
+		Zend_Debug::dump($this);
 		return $this;
 	}
 	
