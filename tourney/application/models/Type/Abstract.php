@@ -155,12 +155,14 @@ abstract class Model_Type_Abstract
 			foreach ($dir as $file) {
 				if ($file != 'Abstract.php' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'php') {
 					$classname = 'Model_Type_' . substr($file, 0, strrpos($file, '.'));
-					if (class_exists($classname)) {
-						$instance = new $classname;
-						if ($instance instanceof Model_Type_Abstract) {
-							$retarray[$classname] = $instance->getTypeName();
+					try {
+						if (class_exists($classname)) {
+							$instance = new $classname;
+							if ($instance instanceof Model_Type_Abstract) {
+								$retarray[$classname] = $instance->getTypeName();
+							}
 						}
-					}
+					} catch (Exception $e) {}
 				}
 			}
 		}

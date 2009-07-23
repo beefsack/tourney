@@ -53,12 +53,14 @@ abstract class Model_MatchupType_Abstract
 			foreach ($dir as $file) {
 				if ($file != 'Abstract.php' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'php') {
 					$classname = 'Model_MatchupType_' . substr($file, 0, strrpos($file, '.'));
-					if (class_exists($classname)) {
-						$instance = new $classname;
-						if ($instance instanceof Model_MatchupType_Abstract) {
-							$retarray[$classname] = $instance->getTypeName();
+					try {
+						if (class_exists($classname)) {
+							$instance = new $classname;
+							if ($instance instanceof Model_MatchupType_Abstract) {
+								$retarray[$classname] = $instance->getTypeName();
+							}
 						}
-					}
+					} catch (Exception $e) {}
 				}
 			}
 		}
