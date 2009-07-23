@@ -104,8 +104,10 @@ public function createandsavegameAction()
      
 public function createandsavematchAction()
     {
-    	$newmatch = new Model_Match(11);
-		echo $newmatch->getId();
+    	
+    	$newmatch = new Model_MatchList(2);
+		//echo $newmatch->getGameid();
+		//echo $newmatch->getData(0);
      }
     
     public function treereftestAction()

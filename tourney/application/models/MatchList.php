@@ -5,6 +5,12 @@ class Model_MatchList implements Iterator
 	// Actual array to store matches in
 	protected $_list = array();
 	
+	function Model_MatchList($index = 0)
+	{
+		if ($index > 0) {
+			$this->load($index);
+		}
+	}
 	/**
 	 * Add a Model_Match or Model_MatchList object to the list.
 	 * @param $match Model_Match or Model_MatchList to add to the list.
@@ -66,7 +72,8 @@ class Model_MatchList implements Iterator
 		 * Then, for each match, a new Model_Match object is created passing the corresponding match id
 		 * After each Model_Match is created, it should be passed to the addMatch of this class to add it to the array
 		 */
-		$select = $this->_getTable()->select()->where('tourneyid = ?', $id);
+		$table = new Model_DbTable_Match;
+		$select = $table->select()->where('tourneyid = ?', $id);
 		$stmt = $select->query();
 		$result = $stmt->fetch();
 		if (!$result) {
@@ -77,7 +84,11 @@ class Model_MatchList implements Iterator
 		$this->_scheduletime = $result['scheduletime'];
 		$this->_data = $result['data'];
 		$this->_dataObject->add($this->_data);
-		$this->_tourneyid = $result['tourneyid'];	
+		$this->_tourneyid = $result['tourneyid'];
+		$newmatch = new Model_Match(id);
+		addMatch($newmatch);	
+		$_list[]=$newmatch;
+		echo $newmatch->getGameid();
 		return $this;
 	}
 	
