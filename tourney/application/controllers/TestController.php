@@ -6,6 +6,12 @@ class TestController extends Zend_Controller_Action
     public function init()
     {
     }
+    
+    public function tourneylistAction()
+    {
+    	Zend_Debug::dump(Model_Type_Abstract::getTypeList());
+    	Zend_Debug::dump(Model_MatchupType_Abstract::getMatchupTypeList());
+    }
 
     public function indexAction()
     {

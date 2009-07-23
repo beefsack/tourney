@@ -43,19 +43,33 @@ abstract class Model_MatchupType_Abstract
 	 */
 	static public function getMatchupTypeList()
 	{
-		// @todo write getMatchupTypeList
 		/*
 		 * What this will do is search through the type folder finding all the Abstract subclasses, and return an array list of them
 		 * This will make it possible to make a list of matchup types so a user can select the one they want when they create the tournament
 		 * The array to return should have key: the class name (which you can get using get_class()) and the value: the result for that objects getName()
 		 */
+		$retarray = array();
+		if ($dir = scandir(APPLICATION_PATH . '/models/MatchupType')) {
+			foreach ($dir as $file) {
+				if ($file != 'Abstract.php' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'php') {
+					$classname = 'Model_MatchupType_' . substr($file, 0, strrpos($file, '.'));
+					if (class_exists($classname)) {
+						$instance = new $classname;
+						if ($instance instanceof Model_MatchupType_Abstract) {
+							$retarray[$classname] = $instance->getTypeName();
+						}
+					}
+				}
+			}
+		}
+		return $retarray;
 	}
 	
 	/**
 	 * Returns the name of the matchup type, for display purposes
 	 * @return string
 	 */
-	abstract public function getName();
+	abstract public function getTypeName();
 	
 	/**
 	 * Constructor for the Model_MatchupType_Abstract object

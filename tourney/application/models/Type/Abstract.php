@@ -143,7 +143,6 @@ abstract class Model_Type_Abstract
 	 */
 	static public function getTypeList()
 	{
-		// @todo write getTypeList
 		/*
 		 * Searches the Type folder for all different tournament types.
 		 * This is used for when a user is creating a tournament and want to select what type to use
@@ -151,6 +150,21 @@ abstract class Model_Type_Abstract
 		 * key: class name for tourney type (get_class() could be useful)
 		 * value: result of object getName()
 		 */
+		$retarray = array();
+		if ($dir = scandir(APPLICATION_PATH . '/models/Type')) {
+			foreach ($dir as $file) {
+				if ($file != 'Abstract.php' && strtolower(substr($file, strrpos($file, '.') + 1)) == 'php') {
+					$classname = 'Model_Type_' . substr($file, 0, strrpos($file, '.'));
+					if (class_exists($classname)) {
+						$instance = new $classname;
+						if ($instance instanceof Model_Type_Abstract) {
+							$retarray[$classname] = $instance->getTypeName();
+						}
+					}
+				}
+			}
+		}
+		return $retarray;
 	}
 	
 	/**

@@ -32,9 +32,9 @@ class Model_MatchupType_Skill extends Model_MatchupType_Abstract
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see models/MatchupType/Model_MatchupType_Abstract#getName()
+	 * @see models/MatchupType/Model_MatchupType_Abstract#getTypeName()
 	 */
-	public function getName()
+	public function getTypeName()
 	{
 		return "Skill";
 	}
