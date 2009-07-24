@@ -25,7 +25,7 @@ class Model_ParticipantList implements Iterator
 				$this->addParticipant($p);
 			}
 		} else {
-			throw new Exception("Non Model_Participant passed to addParticipant");
+			throw new Exception("Non Model_Participant or Model_ParticipantList passed to addParticipant");
 		}
 		return $this;
 	}

@@ -155,7 +155,7 @@ class Model_Participant
 		return $this;
 	}
 	
-	function Participant($index = 0)
+	function Model_Participant($index = 0)
 	{
 		$this->_dataObject = new Model_TourneyData();
 		if ($index > 0) {

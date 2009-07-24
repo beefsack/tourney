@@ -162,7 +162,6 @@ class Model_Match
 	 */
 	public function load($id)
 	{
-		// @todo write load
 		/*
 		 * Loads this match in from the database
 		 * will load the match with the specified index
@@ -182,7 +181,6 @@ class Model_Match
 		$this->_scheduletime = $result['scheduletime'];
 		$this->_playtime = $result['playtime'];
 		$this->_data = $result['data'];	
-		//echo $this->_id;
 		return $this;
 	}
 	

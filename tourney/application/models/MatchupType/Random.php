@@ -1,6 +1,6 @@
 <?php
 
-class Model_MatchupType_Random extends Model_MatchupType_Abstract
+class Model_MatchupType_Random extends Model_MatchupType_Order
 {
 	/**
 	 * (non-PHPdoc)
@@ -8,7 +8,6 @@ class Model_MatchupType_Random extends Model_MatchupType_Abstract
 	 */
 	public function getMatchups()
 	{
-		// @todo write getMatchups
 		/*
 		 * Random matchups are the most simple of the lot
 		 * Just jumble up all $_participantList and put it into a matchup style array
@@ -22,7 +21,12 @@ class Model_MatchupType_Random extends Model_MatchupType_Abstract
 		 * The way to find the next highest power of 2 above a number (the total participants), use the following expression
 		 * pow(2, ceil(log($participantTotal, 2)))
 		 */
-		return $this;
+		$participantArray = array();
+		foreach ($this->_participantList as $p) {
+			$participantArray[] = $p; 
+		}
+		shuffle($participantArray);
+		return $this->_build($participantArray, $this->_numMatchesRequired());
 	}
 	
 	/**

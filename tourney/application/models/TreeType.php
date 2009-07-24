@@ -46,12 +46,18 @@ class Model_TreeType
 	 */
 	public function countNodes()
 	{
-		// @todo Write countNodes
 		/*
 		 * countNodes should be implemented recursively
 		 * Starting at the root, basically it should be return 1 + left->countNodes + right->countNodes
 		 * It would have to check first that left and right are set, cos calling countNodes on a null object would make PHP a bit emotional
 		 */
+		$count = 1;
+		if ($this->_left !== NULL) {
+			$count += $this->_left->countNodes();
+		}
+		if ($this->_right !== NULL) {
+			$count += $this->_right->countNodes();
+		}
 		return $count;
 	}
 	

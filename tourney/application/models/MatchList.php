@@ -26,7 +26,15 @@ class Model_MatchList implements Iterator
 		 * You can check class type like this: if ($match instanceof Model_Match) {
 		 * If it is not a Match or MatchList, it should throw a new exception
 		 */ 
-		$this->_list[] = $match;
+		if ($match instanceof Model_Match) {
+			$this->_list[] = $match;
+		} elseif ($match instanceof Model_MatchList) {
+			foreach ($match as $m) {
+				$this->addMatch($m);
+			}
+		} else {
+			throw new Exception("addMatch called without passing a Model_Match or Model_MatchList");
+		}
 		return $this;
 	}
 	

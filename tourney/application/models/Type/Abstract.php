@@ -10,14 +10,10 @@ abstract class Model_Type_Abstract
 	protected $_dataObject;
 	// Dirty flag, set to true if options are changed, false when built or loaded
 	protected $_dirty = true;
-	// Game id of game to be played in tourney
-	protected $_gameid = 0;
 	// The database id of the tourney, 0 for a new object before it is saved to the database
 	protected $_id = 0;
 	// Match list
 	protected $_matchList;
-	// The matchup type of the tourney = db matchuptype column
-	protected $_matchuptype;
 	// Tourney name = db name field
 	protected $_name;
 	// Participant list
@@ -52,22 +48,6 @@ abstract class Model_Type_Abstract
 			$this->_adminTable = new Model_DbTable_TourneyAdmin();
 		}
 		return $this->_adminTable;
-	}
-	
-	/**
-	 * Gets the actual matchup object populated with the participant list
-	 * @return Model_MatchupType_Abstract
-	 */
-	protected function _getMatchupObject()
-	{
-		if (isset($this->_matchuptype)) {
-			$obj = new $this->_matchuptype;
-			if ($obj instanceof Model_MatchupType_Abstract) {
-				$obj->addParticipant($this->_participantList);
-				return $obj;
-			}
-		}
-		return NULL;
 	}
 	
 	/**
@@ -128,15 +108,6 @@ abstract class Model_Type_Abstract
 		return $this->_matchList;
 	}
 
-	/**
-	 * Returns the Model_MatchupType class name
-	 * @return string
-	 */
-	public function getMatchuptype()
-	{
-		return $this->_matchuptype;
-	}
-	
 	/**
 	 * Returns a full list of available tourney types in an array.  The key is the class name and the data is the result of getTypeName()
 	 * @return array
@@ -202,6 +173,7 @@ abstract class Model_Type_Abstract
 	{
 		$this->_matchList = new Model_MatchList();
 		$this->_participantList = new Model_ParticipantList();
+		$this->_dataObject = new Model_TourneyData();
 		if ($index > 0) {
 			$this->load($index);
 		}
@@ -234,25 +206,9 @@ abstract class Model_Type_Abstract
 	 * @param $game Game to be played
 	 * @return $this
 	 */
-	public function setGame($game)
+	public function setGame(Model_Game $game)
 	{
-		if ($game instanceof Model_Game) {
-			$this->_gameid = $game->getId();
-		} else {
-			$this->_gameid = (integer) $game;
-		}
-		$this->_dirty = true;
-		return $this;
-	}
-	
-	/**
-	 * Sets the matchup type
-	 * @param Model_Matchuptype_Abstract $matchupType Matchup type to set
-	 * @return $this
-	 */
-	public function setMatchuptype(Model_Matchuptype_Abstract $matchupType)
-	{
-		$this->_matchuptype = get_class($matchupType);
+		$this->_dataObject['gameid'] = $game->getId();
 		$this->_dirty = true;
 		return $this;
 	}
