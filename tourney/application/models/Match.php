@@ -170,7 +170,7 @@ class Model_Match
 		 * after loading the match successfully, it will need to load the participants
 		 * for loading the participants, the Model_ParticipantList has a method for this.  You can call load and pass the id of this match
 		 */
-		
+
 		$select = $this->_getTable()->select()->where('id = ?', $id);
 		$stmt = $select->query();
 		$result = $stmt->fetch();
@@ -182,7 +182,7 @@ class Model_Match
 		$this->_scheduletime = $result['scheduletime'];
 		$this->_playtime = $result['playtime'];
 		$this->_data = $result['data'];	
-		echo $this->_id;
+		//echo $this->_id;
 		return $this;
 	}
 	

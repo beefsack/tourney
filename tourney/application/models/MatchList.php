@@ -26,7 +26,7 @@ class Model_MatchList implements Iterator
 		 * You can check class type like this: if ($match instanceof Model_Match) {
 		 * If it is not a Match or MatchList, it should throw a new exception
 		 */ 
-		$_list[] = $match;
+		$this->_list[] = $match;
 		return $this;
 	}
 	
@@ -76,12 +76,17 @@ class Model_MatchList implements Iterator
 		$table = new Model_DbTable_Match;
 		$select = $table->select()->where('tourneyid = ?', $index);
 		$stmt = $select->query();
-		$result = $stmt->fetch();
+		$result = $stmt->fetchAll();
 		if (!$result) {
 			throw new Exception("tourneyid '$index' not found");
 		}
-		$this->addMatch(new Model_Match($result['id']));
-		Zend_Debug::dump($this);
+		//echo "+++";
+		//echo $result['id'];
+		//echo "+++";
+		foreach($result as $row)
+		{
+		$this->addMatch(new Model_Match($row['id']));
+		}
 		return $this;
 	}
 	
