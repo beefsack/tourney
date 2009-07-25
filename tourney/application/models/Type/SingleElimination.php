@@ -100,6 +100,10 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 			}
 			// Now build the match tree, which is done recursively
 			$this->_tree = $this->_createTree($matchups);
+			$data = $this->_tree->data();
+			if ($data instanceof Model_Match) {
+				$data->setData('root', 'true');
+			}
 			$this->_dirty = false;
 		}
 	}
@@ -125,6 +129,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 				$participant->setData('source', $left->data());
 				$participant->setData('sourcetype', 'winner');
 				$match->addParticipant($participant);
+				$match->setData('left', $left->data());
 			} elseif ($left instanceof Model_Participant) {
 				// Left is a participant, so just add it to this match
 				$match->addParticipant($left);
@@ -140,6 +145,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 				$participant->setData('source', $right->data());
 				$participant->setData('sourcetype', 'winner');
 				$match->addParticipant($participant);
+				$match->setData('right', $right->data());
 			} elseif ($right instanceof Model_Participant) {
 				// Right is a participant, so just add it to this match
 				$match->addParticipant($right);

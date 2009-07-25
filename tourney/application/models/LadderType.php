@@ -62,11 +62,12 @@ class Model_LadderType
 	 */
 	public function setSortPriority(array $data)
 	{
-		// @todo Write setSortPriority
 		/*
 		 * A very simple function to set $_sortPriority
 		 * $_sortPriority to be set to the array in $data.
 		 */
+		$this->_sortPriority = $data;
+		$this->_sort();
 		return $this;
 	}
 	

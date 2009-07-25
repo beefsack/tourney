@@ -80,10 +80,26 @@ abstract class Model_Type_Abstract
 	
 	static public function factory($index)
 	{
-		// @todo write factory
 		/*
 		 * factory finds out what sort of tournament has an id of $index, then creates a new tournament of that type and loads it
 		 */
+		$select = $this->_getTable()->select()->where('id = ?', $index);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if (!$result) {
+			throw new Exception("Unable to find tournament with id $index");
+		}
+		if (class_exists($result['type'])) {
+			$tourney = new $result['type'];
+			if ($tourney instanceof Model_Type_Abstract) {
+				$tourney->load($index);
+			} else {
+				throw new Exception("Class not instance of Model_Type_Abstract");
+			}
+		} else {
+			throw new Exception("Class not found " . $result['type']);
+		}
+		return $tourney;
 	}
 	
 	/**
