@@ -5,6 +5,7 @@ class TestController extends Zend_Controller_Action
 
 	public function init()
 	{
+		Zend_Dojo::enableView($this->view);
 	}
 
 	public function tourneylistAction()

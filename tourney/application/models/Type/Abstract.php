@@ -123,14 +123,20 @@ abstract class Model_Type_Abstract
 		$form = new Zend_Form();
 		
 		// Subform for general options which every tournament has
-		$generalsubform = new Zend_Form_SubForm();
+		$generalsubform = new Zend_Dojo_Form_SubForm();
 		$generalsubform->setLegend('Tournament Options');
 		
-		$element = new Zend_Form_Element_Text('name');
+		$element = new Zend_Dojo_Form_Element_TextBox('name');
+		//$element = new Zend_Form_Element_Text('name');
 		$element->setLabel('Name');
 		$element->setRequired(true);
 		$element->addValidator(new Zend_Validate_StringLength(5));
 		$generalsubform->addElement($element);
+		
+		$element = new Zend_Dojo_Form_Element_FilteringSelect('player');
+		$element->setLabel('Add Player');
+		$element->setAutocomplete(true);
+		$form->addElement($element);
 		
 		$form->addSubForm($generalsubform, 'generalsubform');
 		
@@ -141,7 +147,8 @@ abstract class Model_Type_Abstract
 		}
 		
 		// Add a submit button
-		$element = new Zend_Form_Element_Submit('submit');
+		//$element = new Zend_Form_Element_Submit('submit');
+		$element = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$element->setLabel('Submit');
 		$form->addElement($element);
 
