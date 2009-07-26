@@ -8,9 +8,10 @@ $this->headLink()->appendStylesheet(PUBLIC_PATH . '/css/style.css');
 <head>
 <link rel="icon" type="image/vnd.microsoft.icon" href="<?php echo PUBLIC_PATH ?>/img/favico.ico" />
 <?php
+	$dijitTheme = "tundra";
 	if ($this->dojo()->isEnabled()){
 		$this->dojo()->setLocalPath(PUBLIC_PATH . '/js/dojo/dojo/dojo.js')
-					->addStyleSheetModule('dijit.themes.tundra');
+					->addStyleSheetModule('dijit.themes.' . $dijitTheme);
 		echo $this->dojo();
 	}
 
@@ -18,7 +19,7 @@ $this->headLink()->appendStylesheet(PUBLIC_PATH . '/css/style.css');
 	echo $this->headTitle()."\n";
 ?>
 </head>
-<body>
+<body class="<?php echo $dijitTheme ?>">
 <div id=pac>
 <img src="/tourney/public/img/pac.png" /></div>
 <div id="main">

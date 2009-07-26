@@ -126,8 +126,8 @@ abstract class Model_Type_Abstract
 		$generalsubform = new Zend_Dojo_Form_SubForm();
 		$generalsubform->setLegend('Tournament Options');
 		
-		$element = new Zend_Dojo_Form_Element_TextBox('name');
 		//$element = new Zend_Form_Element_Text('name');
+		$element = new Zend_Dojo_Form_Element_TextBox('name');
 		$element->setLabel('Name');
 		$element->setRequired(true);
 		$element->addValidator(new Zend_Validate_StringLength(5));
@@ -136,7 +136,7 @@ abstract class Model_Type_Abstract
 		$element = new Zend_Dojo_Form_Element_FilteringSelect('player');
 		$element->setLabel('Add Player');
 		$element->setAutocomplete(true);
-		$form->addElement($element);
+		$generalsubform->addElement($element);
 		
 		$form->addSubForm($generalsubform, 'generalsubform');
 		
@@ -151,6 +151,11 @@ abstract class Model_Type_Abstract
 		$element = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$element->setLabel('Submit');
 		$form->addElement($element);
+		
+		$form->setSubFormDecorators(array(
+			'FormElements',
+			'Fieldset',
+		));
 
 		// Return the form
 		return $form;

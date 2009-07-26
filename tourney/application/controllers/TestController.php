@@ -5,7 +5,6 @@ class TestController extends Zend_Controller_Action
 
 	public function init()
 	{
-		Zend_Dojo::enableView($this->view);
 	}
 
 	public function tourneylistAction()
@@ -95,8 +94,9 @@ class TestController extends Zend_Controller_Action
 		$eggtourney->save();
 		 
 		$this->view->tourneyTree = $eggtourney->getTree();
+		
+		$form = $eggtourney->getForm();
 		 
-		$form = new Form_Test();
 		if ($this->getRequest()->isPost()) {
 			$postdata = $this->getRequest()->getPost();
 			if ($form->isValid($postdata)) {
@@ -105,7 +105,7 @@ class TestController extends Zend_Controller_Action
 				Zend_Debug::dump($postdata);
 			}
 		}
-		$this->view->form = $eggtourney->getForm();
+		$this->view->form = $form;
 	}
 
 	public function createandsavegameAction()
