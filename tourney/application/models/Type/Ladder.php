@@ -20,6 +20,14 @@ class Model_Type_Ladder extends Model_Type_Abstract implements Model_Ladderable
 	
 	/**
 	 * (non-PHPdoc)
+	 * @see models/Type/Model_Type_Abstract#_typeSpecificForm($form)
+	 */
+	protected function _typeSpecificForm(Zend_Form $form) {
+		
+	}
+	
+	/**
+	 * (non-PHPdoc)
 	 * @see models/Model_Ladderable#getLadder()
 	 */
 	public function getLadder()

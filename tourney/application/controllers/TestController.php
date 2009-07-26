@@ -104,7 +104,7 @@ class TestController extends Zend_Controller_Action
 				Zend_Debug::dump($postdata);
 			}
 		}
-		$this->view->form = $form;
+		$this->view->form = $eggtourney->getForm();
 	}
 
 	public function createandsavegameAction()

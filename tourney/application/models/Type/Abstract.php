@@ -59,6 +59,18 @@ abstract class Model_Type_Abstract
 	}
 	
 	/**
+	 * Returns a subform to be included in the main tourney form
+	 * @return Zend_Form_SubForm
+	 */
+	protected function _typeSpecificGetForm() { return NULL; }
+	
+	/**
+	 * Handles the data in the form specific to the tourney type
+	 * @param array $data The data returned from the submission of the form
+	 */
+	protected function _typeSpecificHandleForm(array $data) {}
+	
+	/**
 	 * Saves the match list
 	 */
 	protected function _saveMatches()
@@ -100,6 +112,41 @@ abstract class Model_Type_Abstract
 			throw new Exception("Class not found " . $result['type']);
 		}
 		return $tourney;
+	}
+	
+	/**
+	 * Gets a form for creation of a tourney of this type
+	 * @return Zend_Form
+	 */
+	public function getForm() {
+		// Make the form to return
+		$form = new Zend_Form();
+		
+		// Subform for general options which every tournament has
+		$generalsubform = new Zend_Form_SubForm();
+		$generalsubform->setLegend('Tournament Options');
+		
+		$element = new Zend_Form_Element_Text('name');
+		$element->setLabel('Name');
+		$element->setRequired(true);
+		$element->addValidator(new Zend_Validate_StringLength(5));
+		$generalsubform->addElement($element);
+		
+		$form->addSubForm($generalsubform, 'generalsubform');
+		
+		// Let the tourney type add more fields if it has specific options
+		$typesubform = $this->_typeSpecificGetForm();
+		if ($typesubform !== NULL) {
+			$form->addSubForm($typesubform, 'typesubform');
+		}
+		
+		// Add a submit button
+		$element = new Zend_Form_Element_Submit('submit');
+		$element->setLabel('Submit');
+		$form->addElement($element);
+
+		// Return the form
+		return $form;
 	}
 	
 	/**
@@ -161,6 +208,19 @@ abstract class Model_Type_Abstract
 	 * @return String
 	 */
 	abstract public function getTypeName();
+	
+	/**
+	 * Takes data returned from the form and adds it to this object
+	 * @param array $data Data returned from the form
+	 */
+	public function handleForm(array $data)
+	{
+		// Set up local fields
+		$this->_name = $data['name'];
+		
+		// Pass the data to the type specific handler for any extra data
+		$this->_typeSpecificHandleForm($data);
+	}
 	
 	/**
 	 * Loads the tourney from the database
