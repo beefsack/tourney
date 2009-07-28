@@ -208,19 +208,13 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#_typeSpecificGetForm()
 	 */
-	protected function _typeSpecificGetForm()
+	protected function _typeSpecificGetForm(Zend_Form_SubForm $form)
 	{
-		$subform = new Zend_Form_SubForm();
-		$subform->setLegend('Single Elimination Options');
-		
-		//$element = new Zend_Form_Element_Select('matchuptype');
 		$element = new Zend_Dojo_Form_Element_FilteringSelect('matchuptype');
 		$element->setLabel('Matchup Type');
 		$element->addMultiOptions(Model_MatchupType_Abstract::getMatchupTypeList());
 		$element->setRequired(true);
-		$subform->addElement($element);
-		
-		return $subform;
+		$form->addElement($element);
 	}
 	
 	protected function _typeSpecificHandleForm(array $data)

@@ -60,9 +60,9 @@ abstract class Model_Type_Abstract
 	
 	/**
 	 * Returns a subform to be included in the main tourney form
-	 * @return Zend_Form_SubForm
+	 * @param Zend_Form_Subform $form
 	 */
-	protected function _typeSpecificGetForm() { return NULL; }
+	protected function _typeSpecificGetForm(Zend_Form_Subform $form) { return NULL; }
 	
 	/**
 	 * Handles the data in the form specific to the tourney type
@@ -121,11 +121,11 @@ abstract class Model_Type_Abstract
 	public function getForm() {
 		// Make the form to return
 		$form = new Zend_Form();
+		$form->setAttrib('onSubmit', 'return checkPlayers()');
 		
 		// Subform for general options which every tournament has
 		$generalsubform = new Zend_Form_SubForm();
 		$generalsubform->setLegend('Tournament Options');
-		$generalsubform->setName('egg');
 		
 		//$element = new Zend_Form_Element_Text('name');
 		$element = new Zend_Dojo_Form_Element_TextBox('name');
@@ -134,30 +134,35 @@ abstract class Model_Type_Abstract
 		$element->addValidator(new Zend_Validate_StringLength(5));
 		$generalsubform->addElement($element);
 		
-		$element = new Zend_Dojo_Form_Element_FilteringSelect('player');
-		$element->setRequired(true);
+		$element = new Zend_Dojo_Form_Element_FilteringSelect('playerselect');
 		$element->setLabel('Add Player');
 		$element->setStoreId('playerStore');
 		$element->setStoreType('dojox.data.QueryReadStore');
 		$element->setStoreParams(array('url' => PUBLIC_PATH . '/ajax/players/format/ajax'));
-		//$playerfield = $element->__toString();
 		$generalsubform->addElement($element);
 		
 		$element = new Zend_Dojo_Form_Element_Button('addplayer');
 		$element->setLabel('Add Player');
-		$element->setAttrib('onClick', 'alert(dijit.byId("generalsubform-player").value)');
+		$element->setAttrib('onClick', 'addPlayer(dijit.byId("generalsubform-playerselect"), document.getElementById("fieldset-playersubform"))');
 		$generalsubform->addElement($element);
+		
+		$playersubform = new Zend_Form_SubForm();
+		$playersubform->setLegend('Players');
+		$playersubform->setName('players');
+		
+		$generalsubform->addSubForm($playersubform, 'playersubform');
 		
 		$form->addSubForm($generalsubform, 'generalsubform');
 		
 		// Let the tourney type add more fields if it has specific options
-		$typesubform = $this->_typeSpecificGetForm();
-		if ($typesubform !== NULL) {
+		$typesubform = new Zend_Form_SubForm();
+		$typesubform->setLegend($this->getTypeName() . ' Options');
+		$this->_typeSpecificGetForm($typesubform);
+		if ($typesubform->count() > 0) {
 			$form->addSubForm($typesubform, 'typesubform');
 		}
 		
 		// Add a submit button
-		//$element = new Zend_Form_Element_Submit('submit');
 		$element = new Zend_Dojo_Form_Element_SubmitButton('submit');
 		$element->setLabel('Submit');
 		$form->addElement($element);
