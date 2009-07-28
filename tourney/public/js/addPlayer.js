@@ -2,7 +2,7 @@ var playerCount = 0;
 
 function addPlayer(player, container)
 {
-	if (player.attr('value') != '') {
+	if (player.isValid() && player.attr('value') != '' && player.attr('value') == player.attr('displayedValue')) {
 		var playerField = document.createElement('input');
 		playerField.setAttribute('type', 'hidden');
 		playerField.setAttribute('name', 'player[]');
