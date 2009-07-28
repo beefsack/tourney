@@ -14,27 +14,78 @@ class Model_Type_Ladder extends Model_Type_Abstract implements Model_Ladderable
 		if ($this->_dirty) {
 			$this->_matchList->clearMatchList();
 			// Rebuild the tournament from scratch
-			$this->_dirty = false;
+			foreach ($this->_participantList as $participant1)
+			{
+				foreach ($this->_participantList as $participant)
+				{
+					if($participant1!=$participant)
+					{
+						$match = new Model_Match();
+
+
+						$match->addParticipant($participant1);
+
+						$match->addParticipant($participant);
+
+						$match->setGame($this->getGame());
+
+						$this->_matchList->addMatch($match);
+					}
+						
+				}
+				$this->_dirty = false;
+				//Zend_Debug::dump($this);
+				
+			}
 		}
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#_typeSpecificForm($form)
 	 */
 	protected function _typeSpecificForm(Zend_Form $form) {
-		
+
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Model_Ladderable#getLadder()
 	 */
 	public function getLadder()
 	{
-		return new Model_LadderType();
+		$array = array();
+		$this->_buildTourney();
+		foreach ($this->getMatchList() as $match)
+		{
+			if($match instanceof Model_Match)
+			{
+				foreach($match->getParticipantList() as $player)
+				if($player instanceof Model_Participant)
+				{
+
+
+						$array[$player->getId]['Name']=(string)$player;
+						$array[$player->getId]['played']++;
+						$array[$player->getId]['wins']++;
+						$array[$player->getId]['loss']++;
+
+				}
+
+					
+			}
+		}
+
+		$ladder = new Model_LadderType();
+		foreach($array as $key=>$row)
+		{
+			$ladder->insertRow($row);
+		}
+
+
+		return $ladder;
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see models/Type/Model_Type_Abstract#getTypeName()

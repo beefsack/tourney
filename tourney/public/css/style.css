@@ -52,6 +52,33 @@ h1
 	font-family:verdana;
 	font-size:small;
 }
+
+/*LADDER STUFF */
+
+.ladder table {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: none none none none;
+	border-color: gray gray gray gray;
+	border-collapse: separate;
+	background-color: white;
+}
+.ladder th {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	border-style: dotted dotted dotted dotted;
+	border-color: gray gray gray gray;
+	background-color: white;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
+.ladder td {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	border-style: dotted dotted dotted dotted;
+	border-color: gray gray gray gray;
+	background-color: white;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
 	
 /* TREE STUFF */
 

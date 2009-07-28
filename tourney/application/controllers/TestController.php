@@ -33,7 +33,7 @@ class TestController extends Zend_Controller_Action
 	{
 		$post = $this->getRequest()->getPost();
 		// This action will create a tournament and then save it to the database
-		$eggtourney = new Model_Type_SingleElimination(); // Make a new ladder tournament
+		$eggtourney = new Model_Type_Ladder(); // Make a new ladder tournament
 		if ($post) {
 			// Make a new type of game, and save it to the database to make it ready
 			// Here we are creating and saving a new game type, but to load a game from the database say with the id of 1, you would do:
@@ -47,8 +47,10 @@ class TestController extends Zend_Controller_Action
 			$game->setScoringtype(new Model_VictoryCondition_HighestScore());
 			$game->save(); // Will throw an exception if any one of name, description or scoringtype isn't set
 			$eggtourney->setGame($game); // Set the game type of the tourney to this new game.  It's also possible to pass an integer to setGame equivalent to the game id in the database
+			if ($eggtourney instanceof Model_Treeable) {	
 			// Now we will set the matchup type for the tournament
-			$eggtourney->setMatchuptype(new $post['typesubform']['matchuptype']);
+				$eggtourney->setMatchuptype(new $post['typesubform']['matchuptype']);
+			}
 			// Now make a list of participants for the tourney
 			$participantlist = new Model_ParticipantList(); // Create a participant list so we can add participants to it.  A participant list is a fancy array.
 			// You can make a participant out of anything!  As long as it implements Model_Participantable (lol)
@@ -62,8 +64,14 @@ class TestController extends Zend_Controller_Action
 			// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
 			$eggtourney->save();
 
-			$this->view->tourneyTree = $eggtourney->getTree();
-		
+			if ($eggtourney instanceof Model_Treeable) {
+				$this->view->tourneyTree = $eggtourney->getTree();
+			}
+
+			if ($eggtourney instanceof Model_Ladderable) {
+				$this->view->tourneyLadder = $eggtourney->getLadder();
+			}
+			
 		}
 		 
 		$this->view->headScript()->appendFile(PUBLIC_PATH . '/js/addPlayer.js');
@@ -95,6 +103,15 @@ class TestController extends Zend_Controller_Action
 		//echo $newmatch->getData(0);
 	}
 
+	public function makeladderAction()
+	{
+		 $newladder=new Model_LadderType();
+		 $newladder->insertRow(array('egg'=>'is tasty', 'trashcan'=>'is not'));
+		 $newladder->insertRow(array('egg'=>'is tastyER', 'trashcandfdfd'=>'is not', 'trashcandfdsssssssssssfd'=>'is not'));
+		 $newladder->getColumnTitles();
+		 $this->view->ladder=$newladder;
+	}
+	
 	public function treereftestAction()
 	{
 		echo (pow(2, ceil(log(29, 2)))) . "<br />";
