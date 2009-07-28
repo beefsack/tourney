@@ -134,11 +134,18 @@ abstract class Model_Type_Abstract
 		$generalsubform = new Zend_Form_SubForm();
 		$generalsubform->setLegend('Tournament Options');
 		
-		//$element = new Zend_Form_Element_Text('name');
 		$element = new Zend_Dojo_Form_Element_TextBox('name');
 		$element->setLabel('Name');
 		$element->setRequired(true);
 		$element->addValidator(new Zend_Validate_StringLength(5));
+		$generalsubform->addElement($element);
+		
+		$element = new Zend_Dojo_Form_Element_FilteringSelect('game');
+		$element->setLabel('Game');
+		$element->setRequired(true);
+		$element->setStoreId('gameStore');
+		$element->setStoreType('dojox.data.QueryReadStore');
+		$element->setStoreParams(array('url' => PUBLIC_PATH . '/ajax/games/format/ajax'));		
 		$generalsubform->addElement($element);
 		
 		$element = new Zend_Dojo_Form_Element_FilteringSelect('playerselect');
