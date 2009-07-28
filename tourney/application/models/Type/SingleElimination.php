@@ -164,6 +164,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 					foreach ($m as $p) {
 						$match->addParticipant($p);
 					}
+					$this->_matchList->addMatch($match);
 					return $node;
 				} elseif ($num == 1) {
 					// Because this matchup only has one participant, we automatically move it up the tree

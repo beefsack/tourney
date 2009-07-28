@@ -36,6 +36,11 @@ class Model_MatchList implements Iterator
 		}
 		return $this;
 	}
+	
+	public function count()
+	{
+		return count($this->_list);
+	}
 
 	/**
 	 * Get the current item when iterating.  Required by Iterator interface.

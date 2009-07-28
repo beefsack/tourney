@@ -123,6 +123,13 @@ abstract class Model_Type_Abstract
 		$form = new Zend_Form();
 		$form->setAttrib('onSubmit', 'return checkPlayers()');
 		
+		// Add the hidden field to hold the serialized version if it exists
+		$element = new Zend_Form_Element_Hidden('object');
+		if ($this->_matchList->count() > 0) {
+			$element->setValue(serialize($this));
+		}
+		$form->addElement($element);
+		
 		// Subform for general options which every tournament has
 		$generalsubform = new Zend_Form_SubForm();
 		$generalsubform->setLegend('Tournament Options');
@@ -169,7 +176,9 @@ abstract class Model_Type_Abstract
 		
 		$element = new Zend_Dojo_Form_Element_SubmitButton('save');
 		$element->setLabel('Save Tournament');
-		$element->setAttrib('disabled', 'disabled');
+		if ($this->_matchList->count() == 0) {
+			$element->setAttrib('disabled', 'disabled');
+		}
 		$form->addElement($element);
 		// Return the form
 		return $form;
