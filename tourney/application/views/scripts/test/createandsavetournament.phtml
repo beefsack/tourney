@@ -1,3 +1,3 @@
-this is text before the tree<?php echo $this->printTree($this->tourneyTree) ?> this is text after the tree
+this is text before the tree<?php echo (isset($this->tourneyTree)) ? $this->printTree($this->tourneyTree) : '' ?> this is text after the tree
 
 <?php echo $this->form ?>
