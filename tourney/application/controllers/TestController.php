@@ -137,6 +137,7 @@ class TestController extends Zend_Controller_Action
 			if ($form->isValid($postdata)) {
 				// it was valid, in real life now we would probably save information in postdata to the database, then redirect to a new page
 				//$this->_helper->redirector('index', 'index'); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
+				$form->getElement('save')->setAttrib('disabled', NULL);
 				Zend_Debug::dump($postdata);
 			}
 		}

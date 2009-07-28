@@ -162,11 +162,15 @@ abstract class Model_Type_Abstract
 			$form->addSubForm($typesubform, 'typesubform');
 		}
 		
-		// Add a submit button
-		$element = new Zend_Dojo_Form_Element_SubmitButton('submit');
-		$element->setLabel('Submit');
+		// Add submit buttons
+		$element = new Zend_Dojo_Form_Element_SubmitButton('preview');
+		$element->setLabel('Preview Tournament');
 		$form->addElement($element);
 		
+		$element = new Zend_Dojo_Form_Element_SubmitButton('save');
+		$element->setLabel('Save Tournament');
+		$element->setAttrib('disabled', 'disabled');
+		$form->addElement($element);
 		// Return the form
 		return $form;
 	}
