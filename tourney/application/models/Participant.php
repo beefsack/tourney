@@ -6,6 +6,8 @@ class Model_Participant
 	protected $_data;
 	// Raw data loaded into Model_TourneyData object
 	protected $_dataObject;
+	// draw = db draw column
+	protected $_draw;
 	// id = db id column
 	protected $_id;
 	// Owner match id = db matchid column
@@ -20,6 +22,10 @@ class Model_Participant
 	static protected $_table;
 	// type of participant (Model_User or Model_Team) = db type column
 	protected $_type;
+	
+	public function __clone() {
+		$this->_dataObject = clone($this->_dataObject);
+	}
 	
 	public function __toString()
 	{
@@ -56,6 +62,15 @@ class Model_Participant
 	public function getData($offset)
 	{
 		return $this->_data[$offset];
+	}
+	
+	/**
+	 * Returns the draw value of this participant.  0 means no draw
+	 * @return float
+	 */
+	public function getDraw()
+	{
+		return $this->_draw;
 	}
 	
 	/**
@@ -104,6 +119,9 @@ class Model_Participant
 	public function getParticipant()
 	{
 		if (isset($this->_type)) {
+			if (!class_exists($this->_type)) {
+				throw new Exception('Participant type class does not exist');
+			}
 			$returnobj = new $this->_type;
 			if ($returnobj instanceof Model_Participantable) {
 				$returnobj->load($this->_participantid);
@@ -147,11 +165,26 @@ class Model_Participant
 	 */
 	public function load($index)
 	{
-		// @todo write load
 		/*
 		 * A simple load, which will just load the relevant data from the database and populate this object with it
 		 * The participant table has a data column, and the data from that column should be loaded into the $_dataObject using load
 		 */
+		$select = $this->_getTable()->select()->where('id = ?', $index);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if (!$result) {
+			throw new Exception("participant id $index not found");
+		}
+		$this->_id = $result['id'];
+		$this->_matchid = $result['matchid'];
+		$this->_participantid = $result['participantid'];
+		$this->_type = $result['type'];
+		$this->_score = $result['score'];
+		$this->_result = $result['result'];
+		$this->_draw = $result['draw'];
+		$this->_data = $result['data'];
+		$this->_dataObject->add($this->_data);
+		
 		return $this;
 	}
 	
@@ -169,7 +202,6 @@ class Model_Participant
 	 */
 	public function save()
 	{
-		// @todo write save
 		/*
 		 * A simple save, but should check that there is a matchid before it is saved
 		 * No point in having a participant without a parent match for it to participate in
@@ -177,6 +209,29 @@ class Model_Participant
 		 * If there is an $_id already that means it is already in the database, so just use update
 		 * Otherwise, use insert
 		 */
+		// Make sure username is set
+		if (!$this->_matchid) {
+			throw new Exception('Unable to save participant as no matchid specified');
+		}
+		$data = array(
+			'matchid' => $this->_matchid,
+			'participantid' => $this->_participantid,
+			'type' => $this->_type,
+			'score' => $this->_score,
+			'result' => $this->_result,
+			'draw' => $this->_draw,
+			'data' => (string) $this->_dataObject,
+		);
+		$select = $this->_getTable()->select()->where('id = ?', $this->_id);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if ($result) {
+			// There is a row, so just update
+			$this->_getTable()->update($data, $this->_getTable()->getAdapter()->quoteInto('id = ?', $this->_id));
+		} else {
+			// There is no row, so insert
+			$this->_getTable()->insert($data);
+		}
 		return $this;
 	}
 	
@@ -204,6 +259,14 @@ class Model_Participant
 	{
 		$this->_dataObject[$offset] = $value;
 		return $this;
+	}
+	
+	public function setDraw($value)
+	{
+		if (!is_numeric($value)) {
+			throw new Exception('setDraw called with non numeric value');
+		}
+		$this->_draw = $value;
 	}
 
 	/**

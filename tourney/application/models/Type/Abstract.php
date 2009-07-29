@@ -75,6 +75,22 @@ abstract class Model_Type_Abstract
 	 */
 	protected function _saveMatches()
 	{
+		if (!$this->_id) {
+			throw new Exception("Unable to save tournament matches, no id found");
+		}
+		foreach ($this->_matchList as $m) {
+			if ($m instanceof Model_Match) {
+				if ($m->getTourneyid() && $m->getTourneyid() != $this->_id) {
+					// There is a match belonging to this tourney that has a different tourneyid, so we copy it so we don't stuff up the original
+					$this->_matchList->removeMatch($m);
+					$newm = clone($m);
+					$newm->setTourneyid($this->_id);
+					$this->_matchList->addMatch($newm);
+				} else {
+					$m->setTourneyid($this->_id);
+				}
+			}
+		}
 		$this->_matchList->save();
 	}
 	
@@ -126,7 +142,9 @@ abstract class Model_Type_Abstract
 		// Add the hidden field to hold the serialized version if it exists
 		$element = new Zend_Form_Element_Hidden('object');
 		if ($this->_matchList->count() > 0) {
-			$element->setValue(serialize($this));
+			$serial = serialize($this);
+			//$element->setValue($serial);
+			$element->setValue('egg');
 		}
 		$form->addElement($element);
 		
@@ -145,14 +163,18 @@ abstract class Model_Type_Abstract
 		$element->setRequired(true);
 		$element->setStoreId('gameStore');
 		$element->setStoreType('dojox.data.QueryReadStore');
-		$element->setStoreParams(array('url' => PUBLIC_PATH . '/ajax/games/format/ajax'));		
+		$element->setStoreParams(array(
+			'url' => PUBLIC_PATH . '/ajax/games/format/ajax',
+		));		
 		$generalsubform->addElement($element);
 		
 		$element = new Zend_Dojo_Form_Element_FilteringSelect('playerselect');
 		$element->setLabel('Add Player');
 		$element->setStoreId('playerStore');
 		$element->setStoreType('dojox.data.QueryReadStore');
-		$element->setStoreParams(array('url' => PUBLIC_PATH . '/ajax/players/format/ajax'));
+		$element->setStoreParams(array(
+			'url' => PUBLIC_PATH . '/ajax/players/format/ajax',
+		));
 		$generalsubform->addElement($element);
 		
 		$element = new Zend_Dojo_Form_Element_Button('addplayer');
@@ -177,15 +199,15 @@ abstract class Model_Type_Abstract
 		}
 		
 		// Add submit buttons
-		$element = new Zend_Dojo_Form_Element_SubmitButton('preview');
+/*		$element = new Zend_Dojo_Form_Element_SubmitButton('preview');
 		$element->setLabel('Preview Tournament');
-		$form->addElement($element);
+		$form->addElement($element);*/
 		
 		$element = new Zend_Dojo_Form_Element_SubmitButton('save');
 		$element->setLabel('Save Tournament');
-		if ($this->_matchList->count() == 0) {
+/*		if ($this->_matchList->count() == 0) {
 			$element->setAttrib('disabled', 'disabled');
-		}
+		}*/
 		$form->addElement($element);
 		// Return the form
 		return $form;
@@ -271,13 +293,23 @@ abstract class Model_Type_Abstract
 	 */
 	public function load($index)
 	{
-		// @todo write load
 		/*
 		 * Loads the data for the tourney from the database.
 		 * First loads basic tourney info from the tourney database.
 		 * See the user class for how to fetch using Zend_Db (user load has been written already)
 		 * Then loads all matches for the tourney by making a new Model_Match passing the match id to the constructor.  The loaded match can then be added to the matchlist
 		 */
+		$select = $this->_getTable()->select()->where('id = ?', $index);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if (!$result) {
+			throw new Exception("tourney id '$index' not found");
+		}
+		$this->_id = $result['id'];
+		$this->_name = $result['name'];
+		$this->_data = $result['data'];
+		$this->_dataObject->add($this->_data);
+		
 		$this->_loadMatches();
 		$this->_dirty = false; // Since it is a fresh load, it isn't dirty
 		return $this;
@@ -304,7 +336,6 @@ abstract class Model_Type_Abstract
 	public function save()
 	{
 		$this->_buildTourney();
-		// @todo write save
 		/*
 		 * Saves the tourney to the database
 		 * This should all be done as a transaction, so if there is an error it can roll back the changes
@@ -314,8 +345,25 @@ abstract class Model_Type_Abstract
 		 * The matches aren't saved in this method because certain types of tourneys will have to override it to do it differently
 		 * Because of this, another function called saveMatches() is called and tourneys can override it if neccessary
 		 */
+		$data = array(
+			'type' => (string) get_class($this),
+			'name' => (string) $this->_name,
+			'data' => (string) $this->_dataObject,
+		);
+
+		$select = $this->_getTable()->select()->where('id = ?', $this->_id);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if ($result) {
+			// There is a row, so just update
+			$this->_getTable()->update($data, $this->_getTable()->getAdapter()->quoteInto('id = ?', $this->_id));
+		} else {
+			// There is no row, so insert
+			$this->_getTable()->insert($data);
+			$this->_id = $this->_getTable()->getAdapter()->lastInsertId();
+		}
+		
 		$this->_saveMatches();
-		$this->_dirty = false; // It has just been saved, it's not dirty anymore
 		return $this;
 	}
 	

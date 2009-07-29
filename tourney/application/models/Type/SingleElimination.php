@@ -114,6 +114,8 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		$node = new Model_TreeType();
 		// Make the match for this node and set it
 		$match = new Model_Match();
+		$match->setData('matchtype', 'tree');
+		$match->setGame($this->getGame());
 		$node->setData($match);
 		// Find out how many matchups are left, and handle differently for 1 or more
 		$num = count($matchups);
@@ -229,8 +231,6 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 	 */
 	protected function _saveMatches()
 	{
-		$this->_buildTourney();
-		// @todo write _saveMatches for SingleElimination
 		/*
 		 * Instead of just saving the list of matches like is standard for tourneys, elimination style tournaments have a complex structure
 		 * Because a match node in the tree depends on the result of the matches below it, the tree needs to be saved from the bottom up.
@@ -248,6 +248,32 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		 * This is easy, cos buildTourney also populates the matchlist
 		 * So we can write an sql select all matches from a tourney that don't exist in the matchList, and delete em
 		 */
+		$this->_saveRecurse($this->_tree);
+	}
+	
+	protected function _saveRecurse(Model_TreeType $node) {
+		if ($node->left()) {
+			$this->_saveRecurse($node->left());
+		}
+		if ($node->right()) {
+			$this->_saveRecurse($node->right());
+		}
+		$data = $node->data();
+		if ($data instanceof Model_Match) {
+			$match = $data->getData('source');
+			if ($match && $match instanceof Model_Match) {
+				$data->setData('source', $match->getId());
+			}
+			$match = $data->getData('left');
+			if ($match && $match instanceof Model_Match) {
+				$data->setData('left', $match->getId());
+			}
+			$match = $data->getData('right');
+			if ($match && $match instanceof Model_Match) {
+				$data->setData('right', $match->getId());
+			}
+			$data->save();
+		}
 	}
 	
 	/**

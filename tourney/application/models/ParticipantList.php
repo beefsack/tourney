@@ -3,6 +3,20 @@
 class Model_ParticipantList implements Iterator
 {
 	protected $_list = array();
+	// Instance of the DbTable to directly access the database.  Accessed via $this->_getTable()
+	static protected $_table;
+	
+	/**
+	 * Singleton method to get the participant table class
+	 * @return Model_DbTable_Participant
+	 */
+	protected function _getTable()
+	{
+		if (!isset($this->_table)) {
+			$this->_table = new Model_DbTable_Participant();
+		}
+		return $this->_table;
+	}
 	
 	/**
 	 * Add a Model_Participant or Model_ParticipantList object to the list.  Duplicates are ignored.
@@ -74,15 +88,20 @@ class Model_ParticipantList implements Iterator
 	 */
 	public function load($index)
 	{
-		// @todo write load
 		/*
 		 * A bit trickier load, similar to a matchlist load
 		 * First there will need to be a query finding all participants in the database with matchid of $index
 		 * Once that is found, need to loop through each and create a new Model_Participant object for each loading the relevant participant id
 		 * After creating each Model_Participant object and loading it, it is added to the array using addParticipant of this object
 		 */
+		$query = $this->_getTable()->select()->where('matchid = ?', $index);
+		$stmt = $query->query();
+		$result = $stmt->fetchAll();
 		
-		
+		foreach ($result as $row) {
+			$p = new Model_Participant($row['id']);
+			$this->addParticipant($p);
+		}
 		
 		return $this;
 	}
@@ -103,7 +122,6 @@ class Model_ParticipantList implements Iterator
 	 */
 	public function removeParticipant($participant)
 	{
-		// @todo write removeParticipant
 		/*
 		 * very similar to removeMatch in Model_MatchList
 		 * If $participant is a Model_Participant, loop through $_list and remove participant if found
@@ -111,6 +129,11 @@ class Model_ParticipantList implements Iterator
 		 * If $participant is anything else, throw a new exception
 		 * Can check class type using instanceof, ie: if ($participant instanceof Model_Participant) {
 		 */
+		foreach ($this->_list as $key => $p) {
+			if ($p === $participant) {
+				unset($this->_list[$key]);
+			}
+		}
 		return $this;
 	}
 	
@@ -129,10 +152,15 @@ class Model_ParticipantList implements Iterator
 	 */
 	public function save()
 	{
-		// @todo write save
 		/*
 		 * A simple loop through all the items in $_list and calling save on each one
 		 */
+		foreach ($this->_list as $p) {
+			if ($p instanceof Model_Participant) {
+				$p->save();
+			}
+		}
+		
 		return $this;
 	}
 	

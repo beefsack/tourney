@@ -4,7 +4,22 @@ class Model_MatchList implements Iterator
 {
 	// Actual array to store matches in
 	protected $_list = array();
-
+	// Instance of the DbTable to directly access the database.  Accessed via $this->_getTable()
+	static protected $_table;
+	
+	/**
+	 * Singleton method to get the participant table class
+	 * @return Model_DbTable_Participant
+	 */
+	protected function _getTable()
+	{
+		if (!isset($this->_table)) {
+			$this->_table = new Model_DbTable_Match();
+		}
+		return $this->_table;
+	}
+	
+	
 	function Model_MatchList($index = 0)
 	{
 		if ($index > 0) {
@@ -84,8 +99,7 @@ class Model_MatchList implements Iterator
 		* Then, for each match, a new Model_Match object is created passing the corresponding match id
 		* After each Model_Match is created, it should be passed to the addMatch of this class to add it to the array
 		*/
-		$table = new Model_DbTable_Match;
-		$select = $table->select()->where('tourneyid = ?', $index);
+		$select = $this->_getTable()->select()->where('tourneyid = ?', $index);
 		$stmt = $select->query();
 		$result = $stmt->fetchAll();
 		if (!$result) {
@@ -130,11 +144,9 @@ class Model_MatchList implements Iterator
 		* instanceof should be used to check the class type of $match, eg: if ($match instanceof Model_Match)
 		*/
 		if ($match instanceof Model_Match) {
-			foreach ($this->_list as $key => $value) {
-				if ($value instanceof Model_Match) {
-					if ($value->getId() == $match->getId()) {
-						unset($this->_list[$key]);
-					}
+			foreach ($this->_list as $key => $m) {
+				if ($m === $match) {
+					unset($this->_list[$key]);
 				}
 			}
 		} elseif ($match instanceof Model_MatchList) {
@@ -165,12 +177,12 @@ class Model_MatchList implements Iterator
 		/*
 		* Calls save on each of the Model_Matches inside $_list
 		*/
-		foreach ($this->_list as $thing)
+		foreach ($this->_list as $m)
 		{
-			$thing->save();
+			if ($m instanceof Model_Match) {
+				$m->save();
+			}
 		}
-		
-		
 		
 		return $this;
 	}

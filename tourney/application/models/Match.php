@@ -177,10 +177,15 @@ class Model_Match
 			throw new Exception("id '$id' not found");
 		}
 		$this->_id = $result['id'];
+		$this->_tourneyid = $result['tourneyid'];
 		$this->_gameid = $result['gameid'];
 		$this->_scheduletime = $result['scheduletime'];
 		$this->_playtime = $result['playtime'];
-		$this->_data = $result['data'];	
+		$this->_data = $result['data'];
+		$this->_dataObject->add($this->_data);
+		
+		$this->_participantList->load($this->_id);
+		
 		return $this;
 	}
 	
@@ -205,13 +210,52 @@ class Model_Match
 	 */
 	public function save()
 	{
-		// @todo write save
 		/*
 		 * A bit more to this save than just saving the match, this also needs to save all the participants for this match
 		 * Firstly it needs to save the match because if it doesn't have an $_id yet it needs to get one.
 		 * Each participant needs to know the match $_id before they can be saved
 		 * After saving the match to the database, you can get the last inserted id using $this->_getTable()->getAdapter()->lastInsertId();
 		 */
+		if (!$this->_gameid) {
+			throw new Exception('Unable to save match as no gameid specified');
+		}
+		$data = array(
+			'tourneyid' => (integer) $this->_tourneyid,
+			'gameid' => (integer) $this->_gameid,
+			'scheduletime' => $this->_scheduletime,
+			'playtime' => $this->_playtime,
+			'data' => (string) $this->_dataObject,
+		);
+		$select = $this->_getTable()->select()->where('id = ?', $this->_id);
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if ($result) {
+			// There is a row, so just update
+			$this->_getTable()->update($data, $this->_getTable()->getAdapter()->quoteInto('id = ?', $this->_id));
+		} else {
+			// There is no row, so insert
+			$this->_getTable()->insert($data);
+			$this->_id = $this->_getTable()->getAdapter()->lastInsertId();
+		}
+		
+		// Now save the participants below this match.
+		// Care is taken to first check that the participants don't have a different matchid as the participant may be referenced in many matches
+		foreach ($this->_participantList as $p) {
+			if ($p instanceof Model_Participant) {
+				if ($p->getMatchid() && $p->getMatchid() != $this->_id) {
+					// There is a participant belonging to this match that has a different matchid, so we copy it so we don't stuff up the original
+					$this->_participantList->removeParticipant($p);
+					$newp = clone($p);
+					$newp->setMatchid($this->_id);
+					$this->_participantList->addParticipant($newp);
+				} else {
+					$p->setMatchid($this->_id);
+				}
+			}
+		}
+		// And then save them all
+		$this->_participantList->save();
+		
 		return $this;
 	}
 	

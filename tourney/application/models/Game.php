@@ -97,19 +97,26 @@ class Model_Game
 		if (!isset($this->_name)) {
 			throw new Exception('$_name not set in Model_Game object');
 		}
-		if (!isset($this->_description)) {
-			throw new Exception('$_description not set in Model_Game object');
-		}
 		if (!isset($this->_scoringtype)) {
 			throw new Exception('$_scoringtype not set in Model_Game object');
 		}
-		// @todo write save
 		/*
 		 * an easy save, there are already checks written to make sure the three members are set
 		 * Next thing to do would be to check if $_id is set or not
 		 * if $_id is set that means that this game is already in the database, so do an update
 		 * If $_id is not set, that means it is not yet in the database and requires to be inserted
 		 */
+		$table = $this->_getTable();
+		$data['name'] = $this->_name;
+		$data['description'] = $this->_description;
+		$data['scoringtype'] = $this->_scoringtype;
+		if ($this->_id > 0) {
+			$table->update($data, $table->getAdapter()->quoteInto('id = ?', $this->_id));
+		} else {
+			$table->insert($data);
+			$this->_id = $table->getAdapter()->lastInsertId();
+		}
+		return $this;
 	}
 	
 	/**
@@ -130,7 +137,7 @@ class Model_Game
 	 */
 	public function setName($value)
 	{
-		$this->_name = value;
+		$this->_name = $value;
 		return $this;
 	}
 	
