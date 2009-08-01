@@ -12,6 +12,37 @@ class TestController extends Zend_Controller_Action
 		Zend_Debug::dump(Model_Type_Abstract::getTypeList());
 		Zend_Debug::dump(Model_MatchupType_Abstract::getMatchupTypeList());
 	}
+	
+	public function adduserAction()
+	{
+		$form = new Form_User();
+		if ($post = $this->getRequest()->getPost()) {
+			if ($form->isValid($post)) {
+				$data['name'] = $post['name'];
+				$data['password'] = sha1($post['password']);
+				$table = new Model_DbTable_User();
+				$table->insert($data);
+				$this->_helper->redirector('index', 'index'); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
+			}
+		}
+		$this->view->form = $form;
+	}
+	
+	public function addgameAction()
+	{
+		$form = new Form_Game();
+		if ($post = $this->getRequest()->getPost()) {
+			if ($form->isValid($post)) {
+				$data['name'] = $post['name'];
+				$data['description'] = $post['description'];
+				$data['scoringtype'] = $post['scoringtype'];
+				$table = new Model_DbTable_Game();
+				$table->insert($data);
+				$this->_helper->redirector('index', 'index'); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
+			}
+		}
+		$this->view->form = $form;
+	}
 
 	public function indexAction()
 	{

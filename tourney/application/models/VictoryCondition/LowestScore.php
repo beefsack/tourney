@@ -15,4 +15,9 @@ class Model_VictoryCondition_LowestScore extends Model_VictoryCondition_Abstract
 		}
 		return 0;
 	}
+	
+	public function getTypeName()
+	{
+		return "Lowest Score";
+	}
 }

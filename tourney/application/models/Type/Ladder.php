@@ -18,7 +18,7 @@ class Model_Type_Ladder extends Model_Type_Abstract implements Model_Ladderable
 			{
 				foreach ($this->_participantList as $participant)
 				{
-					if($participant1!=$participant)
+					if($participant1!==$participant)
 					{
 						$match = new Model_Match();
 
@@ -65,10 +65,10 @@ class Model_Type_Ladder extends Model_Type_Abstract implements Model_Ladderable
 				{
 
 
-						$array[$player->getId]['Name']=(string)$player;
-						$array[$player->getId]['played']++;
-						$array[$player->getId]['wins']++;
-						$array[$player->getId]['loss']++;
+						$array[(string)$player]['Name']=(string)$player;
+						$array[(string)$player]['played']++;
+						$array[(string)$player]['wins']++;
+						$array[(string)$player]['loss']++;
 
 				}
 

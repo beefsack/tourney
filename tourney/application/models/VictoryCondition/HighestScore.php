@@ -15,4 +15,9 @@ class Model_VictoryCondition_HighestScore extends Model_VictoryCondition_Abstrac
 		}
 		return 0;
 	}
+	
+	public function getTypeName()
+	{
+		return "Highest Score";
+	}
 }
