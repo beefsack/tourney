@@ -226,7 +226,7 @@ class Model_Participant
 			'matchid' => (integer) $this->_matchid,
 			'participantid' => (string) $this->_participantid,
 			'type' => (string) $this->_type,
-			'score' => (integer) $this->_score,
+			'score' => (float) $this->_score,
 			'result' => (integer) $this->_result,
 			'draw' => (integer) $this->_draw,
 			'data' => (string) $this->_dataObject,

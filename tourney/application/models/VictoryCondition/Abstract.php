@@ -54,6 +54,53 @@ abstract class Model_VictoryCondition_Abstract
 	 */
 	public function getStandings(Model_ParticipantList $participantlist)
 	{
-		// @todo write getStandings
+		$parray = array();
+		$retarray = array();
+		
+		// Fill the array with participants
+		foreach ($participantlist as $p) {
+			$parray[] = $p;
+		}
+		
+		// Sort into retarray
+		while (count($parray) > 0) {
+			$best = NULL;
+			$bestkey = NULL;
+			foreach ($parray as $key => $p) {
+				if ($best === NULL) {
+					$best = $p;
+					$bestkey = $key;
+				} elseif ($this->_compare($p->getScore(), $best->getScore()) < 2) {
+					// If p is better or equal to best
+					$best = $p;
+					$bestkey = $key;
+				}
+			}
+			
+			// $best is now the best of the remaining, add to retarray
+			$retarray[] = array('participant' => $best, 'draw' => 0, 'result' => 0);
+			unset($parray[$bestkey]);
+		}
+		
+		// Now add the result and draw columns
+		$placeupto = 1;
+		foreach ($retarray as $key => $row) {
+			foreach ($retarray as $subkey => $subrow) {
+				if ($key != $subkey) {
+					if ($this->_compare($retarray[$key]['participant']->getScore(), $retarray[$subkey]['participant']->getScore()) == 0) {
+						$retarray[$key]['draw']++;
+						if ($retarray[$subkey]['result'] > 0) {
+							$retarray[$key]['result'] = $retarray[$subkey]['result'];
+						}
+					}
+				}
+			}
+			if (!$retarray[$key]['result']) {
+				$retarray[$key]['result'] = $placeupto;
+			}
+			$placeupto++;
+		}
+		
+		return $retarray;
 	}
 }

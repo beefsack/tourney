@@ -7,6 +7,61 @@ class TestController extends Zend_Controller_Action
 	{
 	}
 	
+	public function matchAction()
+	{
+		if ($id = $this->_getParam('id')) {
+			$match = new Model_Match($id);
+			$form = $match->getForm();
+			
+			if ($post = $this->getRequest()->getPost()) {
+				if ($form->isValid($post)) {
+					$match->handleForm($post);
+					$match->save();
+				}
+			}
+			
+			$this->view->form = $form;
+		}
+	}
+	
+	public function testvcAction()
+	{
+		$vc = new Model_VictoryCondition_HighestScore();
+		$pl = new Model_ParticipantList();
+		
+		$user = new Model_User('beefsack');
+		$participant = new Model_Participant();
+		$participant->set($user);
+		$participant->setScore(5);
+		$pl->addParticipant($participant);
+		
+		$user = new Model_User('baconheist');
+		$participant = new Model_Participant();
+		$participant->set($user);
+		$participant->setScore(5);
+		$pl->addParticipant($participant);
+		
+		$user = new Model_User('test1');
+		$participant = new Model_Participant();
+		$participant->set($user);
+		$participant->setScore(6);
+		$pl->addParticipant($participant);
+		
+		$user = new Model_User('test2');
+		$participant = new Model_Participant();
+		$participant->set($user);
+		$participant->setScore(5);
+		$pl->addParticipant($participant);
+		
+		$user = new Model_User('test3');
+		$participant = new Model_Participant();
+		$participant->set($user);
+		$participant->setScore(3);
+		$pl->addParticipant($participant);
+		
+		Zend_Debug::dump($vc->getStandings($pl));
+	}
+	
 	public function tourneyAction()
 	{
 		$tourneyid = $this->_getParam('id');

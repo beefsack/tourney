@@ -68,24 +68,48 @@ class Model_Match
 			}
 			$table = new Model_DbTable_Participant();
 			$select = $table->select()
-				->where('data like ', '%source:' . $this->_id . ';%');
+				->where('data like ?', '%source:' . $this->_id . ';%');
 			$stmt = $select->query();
 			$result = $stmt->fetchAll();
 			foreach ($result as $row) {
 				$p = new Model_Participant($row['id']);
 				if ($p->getData('sourcetype') == 'winner') {
-					$p->set($winner);
+					$p->set($winner->getParticipant());
 				} elseif ($p->getData('sourcetype') == 'loser') {
-					$p->set($loser);
+					$p->set($loser->getParticipant());
 				}
 				$p->save();
 			}
 		}
 	}
-	
+
+	/**
+	 * Gets the standings from the victory condition object, then sets the participants draw and result values
+	 * This works really easily because of pass by reference.  The participants passed are the same as the participants returned in the return array.
+	 */
 	protected function _updateResult()
 	{
-		
+		if ($this->hasResult()) {
+			$scoringtype = $this->getGame()->getScoringtype();
+			if (!class_exists($scoringtype)) {
+				throw new Exception("$scoringtype class does not exist");
+			}
+			$scoreobj = new $scoringtype;
+			if ($scoreobj instanceof Model_VictoryCondition_Abstract) {
+				$results = $scoreobj->getStandings($this->_participantList);
+				foreach ($results as $row) {
+					$p = $row['participant'];
+					if ($p instanceof Model_Participant) {
+						$p->setResult($row['result']);
+						$p->setDraw($row['draw']);
+					} else {
+						throw new Exception("found non Model_Participant in returned standings from $scoringtype");
+					}
+				}
+			} else {
+				throw new Exception("$scoringtype is not an instance of Model_VictoryCondition_Abstract");
+			}
+		}
 	}
 	
 	/**
@@ -107,6 +131,36 @@ class Model_Match
 	public function getData($offset)
 	{
 		return $this->_dataObject[$offset];
+	}
+	
+	public function getForm()
+	{
+		$form = new Zend_Dojo_Form();
+		
+		$form->setMethod('post');
+		
+		$element = new Zend_Dojo_Form_Element_DateTextBox('playdate');
+		$element->setLabel('Play Date');
+		$element->setRequired(true);
+		$form->addElement($element);
+		
+		$element = new Zend_Dojo_Form_Element_TimeTextBox('playtime');
+		$element->setLabel('Play Time');
+		$element->setRequired(true);
+		$form->addElement($element);
+		
+		foreach ($this->_participantList as $p) {
+			$element = new Zend_Dojo_Form_Element_NumberTextBox($p->getId().'score');
+			$element->setLabel('Score for ' . $p->getParticipantid());
+			$element->setRequired(true);
+			$form->addElement($element);
+		}
+		
+		$element = new Zend_Dojo_Form_Element_SubmitButton('submit');
+		$element->setLabel('Submit');
+		$form->addElement($element);
+		
+		return $form;
 	}
 
 	/**
@@ -196,6 +250,14 @@ class Model_Match
 		return $this->_tourneyid;
 	}
 	
+	public function handleForm(array $data)
+	{
+		$this->setPlaytime($data['playdate'] . ' ' . $data['playtime']);
+		foreach ($this->_participantList as $p) {
+			$p->setScore($data[$p->getId().'score']);
+		}
+	}
+	
 	public function hasResult()
 	{
 		return ($this->_playtime->getTimestamp() > 0);
@@ -243,8 +305,8 @@ class Model_Match
 	{
 		$this->_dataObject = new Model_TourneyData();
 		$this->_participantList = new Model_ParticipantList();
-		$this->_playtime = new Zend_Date();
-		$this->_scheduletime = new Zend_Date();
+		$this->_playtime = new Zend_Date(0);
+		$this->_scheduletime = new Zend_Date(0);
 		if ($index > 0) {
 			$this->load($index);
 		}
