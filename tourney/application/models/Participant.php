@@ -61,7 +61,7 @@ class Model_Participant
 	 */
 	public function getData($offset)
 	{
-		return $this->_data[$offset];
+		return $this->_dataObject[$offset];
 	}
 	
 	/**

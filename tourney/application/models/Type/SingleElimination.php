@@ -291,9 +291,13 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		$data = $node->data();
 		if ($data instanceof Model_Match) {
 			$data->setTourneyid($this->_id);
-			$match = $data->getData('source');
-			if ($match && $match instanceof Model_Match) {
-				$data->setData('source', $match->getId());
+			foreach ($data->getParticipantList() as $p) {
+				if ($p instanceof Model_Participant) {
+					$source = $p->getData('source');
+					if ($source instanceof Model_Match) {
+						$p->setData('source', $source->getId());
+					}
+				}
 			}
 			$match = $data->getData('left');
 			if ($match && $match instanceof Model_Match) {

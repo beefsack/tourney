@@ -48,6 +48,47 @@ class Model_Match
 	}
 
 	/**
+	 * Finds any participants that source themselves from this match, and if there is a result here update them
+	 */
+	protected function _updateDependants()
+	{
+		if ($this->hasResult()) {
+			foreach ($this->_participantList as $p) {
+				if ($p instanceof Model_Participant) {
+					if ($p->getResult() == 1) {
+						$winner = $p;
+					} elseif (!$loser) {
+						$loser = $p;
+					} else {
+						if ($loser->getResult() < $p->getResult()) {
+							$loser = $p;
+						}
+					}
+				}
+			}
+			$table = new Model_DbTable_Participant();
+			$select = $table->select()
+				->where('data like ', '%source:' . $this->_id . ';%');
+			$stmt = $select->query();
+			$result = $stmt->fetchAll();
+			foreach ($result as $row) {
+				$p = new Model_Participant($row['id']);
+				if ($p->getData('sourcetype') == 'winner') {
+					$p->set($winner);
+				} elseif ($p->getData('sourcetype') == 'loser') {
+					$p->set($loser);
+				}
+				$p->save();
+			}
+		}
+	}
+	
+	protected function _updateResult()
+	{
+		
+	}
+	
+	/**
 	 * Adds a participant to the match
 	 * @param $participant Participant to add
 	 * @return $this
@@ -258,8 +299,19 @@ class Model_Match
 				}
 			}
 		}
+		
+		// Now update the results if this match has a result
+		if ($this->hasResult()) {
+			$this->_updateResult();
+		}
+		
 		// And then save them all
 		$this->_participantList->save();
+		
+		// If there is a result, we should make sure dependants are updated too
+		if ($this->hasResult()) {
+			$this->_updateDependants();
+		}
 			
 		return $this;
 	}

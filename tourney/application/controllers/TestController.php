@@ -91,7 +91,7 @@ class TestController extends Zend_Controller_Action
 					// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
 					if ($this->_getParam('save', '') == 'true') {
 						$eggtourney->save();
-						$this->_helper->redirector('tourney', 'test', NULL, array('id' => $eggtourney->getId())); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
+						//$this->_helper->redirector('tourney', 'test', NULL, array('id' => $eggtourney->getId())); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
 					}
 		
 					if ($eggtourney instanceof Model_Treeable) {
