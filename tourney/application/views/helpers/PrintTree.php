@@ -40,7 +40,11 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 					}
 					$str .= "\">\n";
 					$str .= "<div class=\"treeparticipantname\">" . $p . "</div>\n";
-					$str .= "<div class=\"treeparticipantscore\">" . $p->getScore() . "</div>
+					$str .= "<div class=\"treeparticipantscore\">";
+					if ($p->hasResult()) {
+						$str .= $p->getScore();
+					}
+					$str .= "</div>
 </div>\n";
 				}				
 			}

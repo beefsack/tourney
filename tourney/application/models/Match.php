@@ -30,7 +30,7 @@ class Model_Match
 					'action' => 'view',
 					'id' => $this->_id,
 			), NULL, true);
-			$str = "<a href=\"" . $url . "\">#" . $this->_id . "</a>";
+			$str .= "<a href=\"" . $url . "\">#" . $this->_id . "</a>";
 		}
 		return $str;
 	}
@@ -154,6 +154,11 @@ class Model_Match
 	{
 		return $this->_tourneyid;
 	}
+	
+	public function hasResult()
+	{
+		return ($this->_playtime->getTimestamp() > 0);
+	}
 
 	/**
 	 * Load a match into this object from the database
@@ -179,8 +184,8 @@ class Model_Match
 		$this->_id = $result['id'];
 		$this->_tourneyid = $result['tourneyid'];
 		$this->_gameid = $result['gameid'];
-		$this->_scheduletime = $result['scheduletime'];
-		$this->_playtime = $result['playtime'];
+		$this->_scheduletime->set($result['scheduletime']);
+		$this->_playtime->set($result['playtime']);
 		$this->_data = $result['data'];
 		$this->_dataObject->add($this->_data);
 
@@ -226,7 +231,7 @@ class Model_Match
 			'playtime' => (string) $this->_playtime,
 			'data' => (string) $this->_dataObject,
 		);
-		$select = $this->_getTable()->select()->where('id = ?', $this->_id);
+		$select = $this->_getTable()->select()->where('id = ?', (integer) $this->_id);
 		$stmt = $select->query();
 		$result = $stmt->fetch();
 		if ($result) {
@@ -255,9 +260,6 @@ class Model_Match
 		}
 		// And then save them all
 		$this->_participantList->save();
-			
-		// Finally commit to the database
-		$this->_getTable()->getAdapter()->commit();
 			
 		return $this;
 	}

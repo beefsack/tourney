@@ -32,10 +32,10 @@ abstract class Model_Type_Abstract
 	 */
 	protected function _getTable()
 	{
-		if (!isset($this->_table)) {
-			$this->_table = new Model_DbTable_Tourney();
+		if (!isset(self::$_table)) {
+			self::$_table = new Model_DbTable_Tourney();
 		}
-		return $this->_table;
+		return self::$_table;
 	}
 	
 	/**
@@ -111,7 +111,7 @@ abstract class Model_Type_Abstract
 		/*
 		 * factory finds out what sort of tournament has an id of $index, then creates a new tournament of that type and loads it
 		 */
-		$select = $this->_getTable()->select()->where('id = ?', $index);
+		$select = self::_getTable()->select()->where('id = ?', $index);
 		$stmt = $select->query();
 		$result = $stmt->fetch();
 		if (!$result) {
@@ -223,6 +223,15 @@ abstract class Model_Type_Abstract
 			return new Model_Game($this->_dataObject['gameid']);
 		}
 		return NULL;
+	}
+	
+	/**
+	 * Gets the id of this tournament
+	 * @return integer
+	 */
+	public function getId()
+	{
+		return $this->_id;
 	}
 	
 	/**
@@ -358,7 +367,8 @@ abstract class Model_Type_Abstract
 		 * The matches aren't saved in this method because certain types of tourneys will have to override it to do it differently
 		 * Because of this, another function called saveMatches() is called and tourneys can override it if neccessary
 		 */
-		$this->_getTable()->getAdapter()->beginTransaction();
+		$adapter = $this->_getTable()->getAdapter();
+		$adapter->beginTransaction();
 		try {
 			$data = array(
 				'type' => (string) get_class($this),
@@ -366,7 +376,7 @@ abstract class Model_Type_Abstract
 				'data' => (string) $this->_dataObject,
 			);
 	
-			$select = $this->_getTable()->select()->where('id = ?', $this->_id);
+			$select = $this->_getTable()->select()->where('id = ?', (integer) $this->_id);
 			$stmt = $select->query();
 			$result = $stmt->fetch();
 			if ($result) {
@@ -381,9 +391,9 @@ abstract class Model_Type_Abstract
 			$this->_saveMatches();
 			
 			// now commit all of the changes
-			$this->_getTable()->getAdapter()->commit();
+			$adapter->commit();
 		} catch (Exception $e) {
-			$this->_getTable()->getAdapter()->rollBack();
+			$adapter->rollBack();
 			throw $e;
 		}
 		return $this;

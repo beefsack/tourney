@@ -7,6 +7,21 @@ class TestController extends Zend_Controller_Action
 	{
 	}
 	
+	public function tourneyAction()
+	{
+		$tourneyid = $this->_getParam('id');
+		if ($tourneyid) {
+			$tourney = Model_Type_Abstract::factory($tourneyid);
+			$this->view->id = $tourney->getId();
+			if ($tourney instanceof Model_Treeable) {
+				$this->view->tourneyTree = $tourney->getTree();
+			}
+			if ($tourney instanceof Model_Ladderable) {
+				$this->view->tourneyLadder = $tourney->getLadder();
+			}
+		}
+	}
+
 	public function tourneylistAction()
 	{
 		Zend_Debug::dump(Model_Type_Abstract::getTypeList());
@@ -76,6 +91,7 @@ class TestController extends Zend_Controller_Action
 					// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
 					if ($this->_getParam('save', '') == 'true') {
 						$eggtourney->save();
+						$this->_helper->redirector('tourney', 'test', NULL, array('id' => $eggtourney->getId())); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
 					}
 		
 					if ($eggtourney instanceof Model_Treeable) {

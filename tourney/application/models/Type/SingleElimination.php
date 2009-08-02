@@ -204,7 +204,37 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 	 */
 	protected function _loadMatches()
 	{
-		// @todo write _loadMatches for SingleElimination
+		$table = new Model_DbTable_Match();
+		$select = $table->select()
+			->where('tourneyid = ?', (integer) $this->_id)
+			->where('data like ?', '%root:true;%');
+		$stmt = $select->query();
+		$result = $stmt->fetch();
+		if ($result) {
+			$this->_tree = $this->_loadRecurse($result['id']);
+		} else {
+			$this->_tree = NULL;
+		}
+	}
+	
+	/**
+	 * Recurses through the tree to load all the matches
+	 * @param $id Match id to load
+	 * @return Model_TreeType
+	 */
+	protected function _loadRecurse($id)
+	{
+		$node = new Model_TreeType();
+		$match = new Model_Match($id);
+		$this->_matchList->addMatch($match);
+		$node->setData($match);
+		if ($match->getData('left')) {
+			$node->setLeft($this->_loadRecurse($match->getData('left')));
+		}
+		if ($match->getData('right')) {
+			$node->setRight($this->_loadRecurse($match->getData('right')));
+		}
+		return $node;
 	}
 	
 	/**
@@ -260,6 +290,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		}
 		$data = $node->data();
 		if ($data instanceof Model_Match) {
+			$data->setTourneyid($this->_id);
 			$match = $data->getData('source');
 			if ($match && $match instanceof Model_Match) {
 				$data->setData('source', $match->getId());

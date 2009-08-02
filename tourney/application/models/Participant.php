@@ -29,14 +29,14 @@ class Model_Participant
 	
 	public function __toString()
 	{
-		if (isset($this->_type) && isset($this->_participantid)) {
+		if ($this->_type && $this->_participantid) {
 			$participant = new $this->_type;
 			if ($participant instanceof Model_Participantable) {
 				$participant->load($this->_participantid);
 				return (string) $participant;				
 			}
-		} elseif (isset($this->_dataObject['source'])) {
-			return ucwords($this->_dataObject['sourcetype']) . " of " . $this->_dataObject['source'];
+		} elseif ($this->_dataObject['source']) {
+			return ucwords($this->_dataObject['sourcetype']) . " " . $this->_dataObject['source'];
 		} else {
 			return ".";
 		}
@@ -159,6 +159,15 @@ class Model_Participant
 	}
 	
 	/**
+	 * True if there is a result
+	 * @return boolean
+	 */
+	public function hasResult()
+	{
+		return ($this->_result > 0);
+	}
+	
+	/**
 	 * Loads the participant from the database
 	 * @param $index Index of participant to load
 	 * @return $this
@@ -191,7 +200,7 @@ class Model_Participant
 	function Model_Participant($index = 0)
 	{
 		$this->_dataObject = new Model_TourneyData();
-		if ($index > 0) {
+		if ($index) {
 			$this->load($index);
 		}
 	}
@@ -214,15 +223,15 @@ class Model_Participant
 			throw new Exception('Unable to save participant as no matchid specified');
 		}
 		$data = array(
-			'matchid' => $this->_matchid,
-			'participantid' => $this->_participantid,
-			'type' => $this->_type,
-			'score' => $this->_score,
-			'result' => $this->_result,
-			'draw' => $this->_draw,
+			'matchid' => (integer) $this->_matchid,
+			'participantid' => (string) $this->_participantid,
+			'type' => (string) $this->_type,
+			'score' => (integer) $this->_score,
+			'result' => (integer) $this->_result,
+			'draw' => (integer) $this->_draw,
 			'data' => (string) $this->_dataObject,
 		);
-		$select = $this->_getTable()->select()->where('id = ?', $this->_id);
+		$select = $this->_getTable()->select()->where('id = ?', (integer) $this->_id);
 		$stmt = $select->query();
 		$result = $stmt->fetch();
 		if ($result) {

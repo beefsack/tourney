@@ -99,12 +99,9 @@ class Model_MatchList implements Iterator
 		* Then, for each match, a new Model_Match object is created passing the corresponding match id
 		* After each Model_Match is created, it should be passed to the addMatch of this class to add it to the array
 		*/
-		$select = $this->_getTable()->select()->where('tourneyid = ?', $index);
+		$select = $this->_getTable()->select()->where('tourneyid = ?', (integer) $index);
 		$stmt = $select->query();
 		$result = $stmt->fetchAll();
-		if (!$result) {
-			throw new Exception("tourneyid '$index' not found");
-		}
 		foreach($result as $row) {
 			$this->addMatch(new Model_Match($row['id']));
 		}
