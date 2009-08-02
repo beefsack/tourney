@@ -67,31 +67,12 @@ class TestController extends Zend_Controller_Action
 			$post = $this->getRequest()->getPost();
 			// This action will create a tournament and then save it to the database
 			$eggtourney = new $type; // Make a new ladder tournament
-			
 			if ($eggtourney instanceof Model_Type_Abstract) {
-				if ($post) {
-					// Make a new type of game, and save it to the database to make it ready
-					// Here we are creating and saving a new game type, but to load a game from the database say with the id of 1, you would do:
-					// $game = new Model_Game(1);
-					// OR
-					// $game = new Model_Game();
-					// $game->load(1);
-					$game = new Model_Game($post['generalsubform']['game']);
-					$eggtourney->setGame($game); // Set the game type of the tourney to this new game.  It's also possible to pass an integer to setGame equivalent to the game id in the database
-					if ($eggtourney instanceof Model_Treeable) {	
-					// Now we will set the matchup type for the tournament
-						$eggtourney->setMatchuptype(new $post['typesubform']['matchuptype']);
-					}
-					// Now make a list of participants for the tourney
-					$participantlist = new Model_ParticipantList(); // Create a participant list so we can add participants to it.  A participant list is a fancy array.
-					// You can make a participant out of anything!  As long as it implements Model_Participantable (lol)
-					// Putting a string when creating a Model_User will load that user from the database.  If that model isn't there, it will throw an exception.
-					foreach ($post['player'] as $player) {
-						$participant = new Model_Participant();
-						$user = new Model_User($player);
-						$participant->set($user);
-						$eggtourney->addParticipant($participant);
-					}
+				$form = $eggtourney->getForm();
+				if ($post && $form->isValid($post)) {
+					// Let the tourney object take the data
+					$eggtourney->handleForm($post);
+					
 					// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
 					if ($this->_getParam('save', '') == 'true') {
 						$eggtourney->save();
@@ -106,19 +87,19 @@ class TestController extends Zend_Controller_Action
 					}
 					
 				}
-			
+
+				//Zend_Debug::dump($eggtourney);
+				
 				$this->view->headScript()->appendFile(PUBLIC_PATH . '/js/addPlayer.js');
 				
-				$form = $eggtourney->getForm();
-				 
-				if ($this->getRequest()->isPost()) {
+				/*if ($this->getRequest()->isPost()) {
 					$postdata = $this->getRequest()->getPost();
 					if ($form->isValid($postdata)) {
 						// it was valid, in real life now we would probably save information in postdata to the database, then redirect to a new page
 						//$this->_helper->redirector('index', 'index'); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
-						Zend_Debug::dump($postdata);
+						Zend_Debug::dump($eggtourney);
 					}
-				}
+				}*/
 			}
 		}
 		if (!$form) {

@@ -115,7 +115,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		// Make the match for this node and set it
 		$match = new Model_Match();
 		$match->setData('matchtype', 'tree');
-		$match->setGame($this->getGame());
+		$match->setGame($this->getGame()->getId());
 		$node->setData($match);
 		// Find out how many matchups are left, and handle differently for 1 or more
 		$num = count($matchups);

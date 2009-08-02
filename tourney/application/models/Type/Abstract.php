@@ -219,8 +219,8 @@ abstract class Model_Type_Abstract
 	 */
 	public function getGame()
 	{
-		if ($this->_gameid > 0) {
-			return new Model_Game($this->_gameid);
+		if ($this->_dataObject['gameid'] > 0) {
+			return new Model_Game($this->_dataObject['gameid']);
 		}
 		return NULL;
 	}
@@ -280,10 +280,23 @@ abstract class Model_Type_Abstract
 	public function handleForm(array $data)
 	{
 		// Set up local fields
-		$this->_name = $data['name'];
+		
+		// Set the name
+		$this->_name = $data['generalsubform']['name'];
+		
+		// Set the game
+		$this->setGame(new Model_Game($data['generalsubform']['game']));
+		
+		// Add all the participants
+		foreach ($data['player'] as $player) {
+			$participant = new Model_Participant();
+			$user = new Model_User($player);
+			$participant->set($user);
+			$this->addParticipant($participant);
+		}		
 		
 		// Pass the data to the type specific handler for any extra data
-		$this->_typeSpecificHandleForm($data);
+		$this->_typeSpecificHandleForm($data['typesubform']);
 	}
 	
 	/**
@@ -345,25 +358,34 @@ abstract class Model_Type_Abstract
 		 * The matches aren't saved in this method because certain types of tourneys will have to override it to do it differently
 		 * Because of this, another function called saveMatches() is called and tourneys can override it if neccessary
 		 */
-		$data = array(
-			'type' => (string) get_class($this),
-			'name' => (string) $this->_name,
-			'data' => (string) $this->_dataObject,
-		);
-
-		$select = $this->_getTable()->select()->where('id = ?', $this->_id);
-		$stmt = $select->query();
-		$result = $stmt->fetch();
-		if ($result) {
-			// There is a row, so just update
-			$this->_getTable()->update($data, $this->_getTable()->getAdapter()->quoteInto('id = ?', $this->_id));
-		} else {
-			// There is no row, so insert
-			$this->_getTable()->insert($data);
-			$this->_id = $this->_getTable()->getAdapter()->lastInsertId();
+		$this->_getTable()->getAdapter()->beginTransaction();
+		try {
+			$data = array(
+				'type' => (string) get_class($this),
+				'name' => (string) $this->_name,
+				'data' => (string) $this->_dataObject,
+			);
+	
+			$select = $this->_getTable()->select()->where('id = ?', $this->_id);
+			$stmt = $select->query();
+			$result = $stmt->fetch();
+			if ($result) {
+				// There is a row, so just update
+				$this->_getTable()->update($data, $this->_getTable()->getAdapter()->quoteInto('id = ?', $this->_id));
+			} else {
+				// There is no row, so insert
+				$this->_getTable()->insert($data);
+				$this->_id = $this->_getTable()->getAdapter()->lastInsertId();
+			}
+			
+			$this->_saveMatches();
+			
+			// now commit all of the changes
+			$this->_getTable()->getAdapter()->commit();
+		} catch (Exception $e) {
+			$this->_getTable()->getAdapter()->rollBack();
+			throw $e;
 		}
-		
-		$this->_saveMatches();
 		return $this;
 	}
 	

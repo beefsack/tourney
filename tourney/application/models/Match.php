@@ -20,21 +20,21 @@ class Model_Match
 	static protected $_table;
 	// Parent tournament tourneyid = db tourneyid column
 	protected $_tourneyid;
-	
+
 	public function __toString()
 	{
 		$str = "Match ";
 		if (isset($this->_id)) {
 			$url = Zend_View_Helper_Url::url(
-				array('controller' => 'match',
+			array('controller' => 'match',
 					'action' => 'view',
 					'id' => $this->_id,
-				), NULL, true);
+			), NULL, true);
 			$str = "<a href=\"" . $url . "\">#" . $this->_id . "</a>";
 		}
 		return $str;
 	}
-	
+
 	/**
 	 * Singleton method to get the match table class
 	 * @return Model_DbTable_Match
@@ -46,7 +46,7 @@ class Model_Match
 		}
 		return $this->_table;
 	}
-	
+
 	/**
 	 * Adds a participant to the match
 	 * @param $participant Participant to add
@@ -57,7 +57,7 @@ class Model_Match
 		$this->_participantList->addParticipant($participant);
 		return $this;
 	}
-	
+
 	/**
 	 * Get an item from the dataObject
 	 * @param $offset
@@ -67,7 +67,7 @@ class Model_Match
 	{
 		return $this->_dataObject[$offset];
 	}
-	
+
 	/**
 	 * Gets the game object for this match
 	 * @return Model_Game
@@ -79,7 +79,7 @@ class Model_Match
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Returns the gameid
 	 * @return integer
@@ -88,7 +88,7 @@ class Model_Match
 	{
 		return $this->_gameid;
 	}
-	
+
 	/**
 	 * Gets the match id, 0 if not saved in db yet
 	 * @return integer
@@ -97,7 +97,7 @@ class Model_Match
 	{
 		return $this->_id;
 	}
-	
+
 	/**
 	 * Gets the participant list
 	 * @return Model_ParticipantList
@@ -106,7 +106,7 @@ class Model_Match
 	{
 		return $this->_participantList;
 	}
-	
+
 	/**
 	 * Gets the play time, empty if not played yet
 	 * @return string
@@ -118,7 +118,7 @@ class Model_Match
 		}
 		return $this->_playtime->get();
 	}
-	
+
 	/**
 	 * Gets the scores from each of the participants in the participant list, checks the game object to get the requirement for victory, then returns a ParticipantList in the order of placings.
 	 * @return Model_ParticipantList, NULL if no result yet because playtime is not set
@@ -133,7 +133,7 @@ class Model_Match
 		}
 		return NULL;
 	}
-	
+
 	/**
 	 * Gets the scheduled time, NULL if there is no scheduled time
 	 * @return string
@@ -145,7 +145,7 @@ class Model_Match
 		}
 		return $this->_scheduletime->get();
 	}
-	
+
 	/**
 	 * Gets the parent tourney id, 0 if it is a standalone match
 	 * @return integer
@@ -154,7 +154,7 @@ class Model_Match
 	{
 		return $this->_tourneyid;
 	}
-	
+
 	/**
 	 * Load a match into this object from the database
 	 * @param $index Index of match to load
@@ -183,12 +183,12 @@ class Model_Match
 		$this->_playtime = $result['playtime'];
 		$this->_data = $result['data'];
 		$this->_dataObject->add($this->_data);
-		
+
 		$this->_participantList->load($this->_id);
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Constructor
 	 * @param $index Optional match index to load
@@ -203,7 +203,7 @@ class Model_Match
 			$this->load($index);
 		}
 	}
-	
+
 	/**
 	 * Save this match to the database
 	 * @return $this
@@ -222,8 +222,8 @@ class Model_Match
 		$data = array(
 			'tourneyid' => (integer) $this->_tourneyid,
 			'gameid' => (integer) $this->_gameid,
-			'scheduletime' => $this->_scheduletime,
-			'playtime' => $this->_playtime,
+			'scheduletime' => (string) $this->_scheduletime,
+			'playtime' => (string) $this->_playtime,
 			'data' => (string) $this->_dataObject,
 		);
 		$select = $this->_getTable()->select()->where('id = ?', $this->_id);
@@ -237,7 +237,7 @@ class Model_Match
 			$this->_getTable()->insert($data);
 			$this->_id = $this->_getTable()->getAdapter()->lastInsertId();
 		}
-		
+			
 		// Now save the participants below this match.
 		// Care is taken to first check that the participants don't have a different matchid as the participant may be referenced in many matches
 		foreach ($this->_participantList as $p) {
@@ -255,10 +255,13 @@ class Model_Match
 		}
 		// And then save them all
 		$this->_participantList->save();
-		
+			
+		// Finally commit to the database
+		$this->_getTable()->getAdapter()->commit();
+			
 		return $this;
 	}
-	
+
 	/**
 	 * Sets a piece of data in the dataObject
 	 * @param $offset Offset to save at
@@ -270,7 +273,7 @@ class Model_Match
 		$this->_dataObject[$offset] = $value;
 		return $this;
 	}
-	
+
 	/**
 	 * Sets the game for the match.  Uses a reference so if the game has to be saved and is used for multiple matches, it is only saved once.  Use getGame and unset to prevent memory leaks.
 	 * @param Model_Game $game The game to set
@@ -285,7 +288,7 @@ class Model_Match
 		}
 		return $this;
 	}
-	
+
 	/**
 	 * Sets the play time.  Setting this will flag the game as finished and will produce a result.
 	 * @param $value Any accepted value for Zend_Date
@@ -296,7 +299,7 @@ class Model_Match
 		$this->_playtime->set($value);
 		return $this;
 	}
-	
+
 	/**
 	 * Sets the schedule time.
 	 * @param $value Any accepted value for Zend_Date
@@ -307,7 +310,7 @@ class Model_Match
 		$this->_scheduletime->set($value);
 		return $this;
 	}
-	
+
 	/**
 	 * Sets the parent tourney id
 	 * @param $value Tourney id
@@ -318,7 +321,7 @@ class Model_Match
 		$this->_tourneyid = $value;
 		return $this;
 	}
-	
+
 	/**
 	 * Unset a piece of data in the data object
 	 * @param $offset Offset to unset
