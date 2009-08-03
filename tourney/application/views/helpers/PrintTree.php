@@ -6,29 +6,30 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 {
 	
 	
-	public function printTree(Model_TreeType $tree)
+	public function printTree(Model_TreeType $tree, $treeonly = false)
 	{
-		
-		$this->view->headScript()->appendFile(PUBLIC_PATH . '/js/match.js');
-		$theForm = new Form_ScoreInput;
-		
-		$theForm->setPlayers(1);
-		
-		$str.= $this->view->customDijit(
-		'scoredialog',
-		$theForm,
-		array(
-
-        	'dojoType' => 'dijit.Dialog',
-        	'title'    => 'Enter Scores',
-        	'region'   => 'center',
-   		)
-   		
-		);
-		$str .= "<div class=\"tree\">\n";
+		if (!$treeonly) {
+			$this->view->headScript()->appendFile(PUBLIC_PATH . '/js/match.js');
+			$theForm = new Form_ScoreInput;
+			
+			$theForm->setPlayers(1);
+			
+			$str.= $this->view->customDijit(
+			'scoredialog',
+			$theForm,
+			array(
+	
+	        	'dojoType' => 'dijit.Dialog',
+	        	'title'    => 'Enter Scores',
+	        	'region'   => 'center',
+	   		)
+	   		
+			);
+			$str .= "<div id=\"treecontentpane\" dojoType=\"dijit.layout.ContentPane\" class=\"tree\">\n";
+		}
 		$str .= $this->_stepTree($tree);
-		$str .= "</div>\n";
-		echo $str;
+		if (!$treeonly) $str .= "</div>\n";
+		return $str;
 	}
 	
 	protected function _stepTree(Model_TreeType $tree, $treeDepth = 0, $root = true, $baseHeight = 100, $baseWidth = 100)

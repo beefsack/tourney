@@ -5,31 +5,63 @@ class AjaxController extends Zend_Controller_Action
 
 	public function init()
 	{
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);    
+	}
+	
+	public function savematchAction()
+	{
+		try {
+		$matchid = $this->_getParam('matchid');
+		$match = new Model_Match($matchid);
+		$match->handleForm($this->_getAllParams());
+		$match->save();
+		} catch (Exception $e) {
+			header("HTTP/1.0 404 Not Found");
+			exit;
+		}
+	}
+	
+	public function treeAction()
+	{
+		$tourneyid = $this->_getParam('tourneyid');
+		
+		$tourney = Model_Type_Abstract::factory($tourneyid);
+		
+		if ($tourney instanceof Model_Interface_Tree) {
+			echo $this->view->printTree($tourney->getTree(), true);
+		} else {
+			echo "Specified tournament does not have a tree";
+		}
 	}
 	
 	public function matchformAction()
 	{
-		$matchId = $this->_getParam("matchid");
-		$form=new Form_ScoreInput;
-		$form->setPlayers($matchId);
+		$matchid = $this->_getParam('matchid');
 		
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
-        
-        echo $form;
+		// first load the match and make sure that all the participants are decided.  If there is an empty participantid, then one of the participants is not yet known.
+		$match = new Model_Match($matchid);
 		
+		$valid = true;
+		foreach ($match->getParticipantList() as $p) {
+			$valid = $valid && ($p->getParticipantId() == true);
+		}
+		
+		if ($valid) {
+			$form = new Form_ScoreInput;
+			$form->setPlayers($matchid);
+			
+	        echo $form;
+		} else {
+			echo "One or more participants in this match is not yet known.";
+		}
 	}
 
 	public function playersAction()
 	{
-		//$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH . '/log/log.txt');
-		//$logger = new Zend_Log($writer);
-		//$logger->log('players called', 7);
 		if ('ajax' != $this->_getParam('format', false)) {
-			//$logger->log('format not set to ajax, exiting', 7);
 			return $this->_helper->redirector('index', 'index');
 		}
-		//$logger->log('format set to ajax, returning json object', 7);
 		$table = new Model_DbTable_User();
 		$query = $table->select()
 		->where('name like ?', str_replace('*', '%', $this->_getParam('name')))
@@ -46,14 +78,9 @@ class AjaxController extends Zend_Controller_Action
 
 	public function gamesAction()
 	{
-		//$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH . '/log/log.txt');
-		//$logger = new Zend_Log($writer);
-		//$logger->log('players called', 7);
 		if ('ajax' != $this->_getParam('format', false)) {
-			//$logger->log('format not set to ajax, exiting', 7);
 			return $this->_helper->redirector('index', 'index');
 		}
-		//$logger->log('format set to ajax, returning json object', 7);
 		$table = new Model_DbTable_Game();
 		$query = $table->select()
 		->where('name like ?', str_replace('*', '%', $this->_getParam('name')))

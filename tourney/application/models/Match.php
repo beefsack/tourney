@@ -80,6 +80,7 @@ class Model_Match implements Model_Interface_Unique
 					$p->set($loser->getParticipant());
 				}
 				$p->save();
+				$submatch = $p->getMatch()->_updateDependants();
 			}
 		}
 	}
@@ -262,7 +263,7 @@ class Model_Match implements Model_Interface_Unique
 
 	public function handleForm(array $data)
 	{
-		$this->setPlaytime($data['playdate'] . ' ' . $data['playtime']);
+		$this->setPlaytime(time());
 		foreach ($this->_participantList as $p) {
 			$p->setScore($data[$p->getId().'score']);
 		}
