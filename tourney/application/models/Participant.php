@@ -36,7 +36,12 @@ class Model_Participant
 				return (string) $participant;				
 			}
 		} elseif ($this->_dataObject['source']) {
-			return ucwords($this->_dataObject['sourcetype']) . " " . $this->_dataObject['source'];
+			if ($this->_dataObject['source'] instanceof Model_Match) {
+				$match = $this->_dataObject['source'];
+			} else {
+				$match = new Model_Match($this->_dataObject['source']);
+			}
+			return ucwords($this->_dataObject['sourcetype']) . " $match";
 		} else {
 			return ".";
 		}

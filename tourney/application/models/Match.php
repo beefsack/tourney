@@ -23,7 +23,7 @@ class Model_Match implements Model_Interface_Unique
 
 	public function __toString()
 	{
-		$str = "Match ";
+		$str = "";
 		if (isset($this->_id)) {
 			$url = Zend_View_Helper_Url::url(
 			array('controller' => 'match',

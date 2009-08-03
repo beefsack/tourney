@@ -26,7 +26,7 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 <div class=\"treeverthax\">
 <div class=\"treematch\">\n";
 		if ($data instanceof Model_Match) {
-			$str .= "<div class=\"treematchinfo\">" . $data . "</div>\n";
+			$str .= "<div class=\"treematchinfo\">Match " . $data . "</div>\n";
 			foreach ($data->getParticipantList() as $p) {
 				if ($p instanceof Model_Participant) {
 					$str .= "<div class=\"treeparticipant";

@@ -63,7 +63,7 @@ class Model_Type_DoubleElimination extends Model_Type_SingleElimination
 			$match->addParticipant($participant);
 			// winner of the loser tree
 			$participant = new Model_Participant();
-			$participant->setData('source', $winnertree->data());
+			$participant->setData('source', $losertree->data());
 			$participant->setData('sourcetype', 'winner');
 			$match->addParticipant($participant);
 			// set node data
@@ -130,7 +130,17 @@ class Model_Type_DoubleElimination extends Model_Type_SingleElimination
 			$match->addParticipant($participant);
 			$node->setLeft($subnode);
 		} elseif ($left || $right) {
-			
+			// Just promote the match to here if there is only one match
+			$subnode = ($left) ? $left : $right;
+			if ($subnode instanceof Model_TreeType) {
+				$subparticipant = new Model_Participant();
+				$subparticipant->setData('source', $subnode->data());
+				$subparticipant->setData('sourcetype', 'winner');
+				$match->addParticipant($subnodeparticipant);
+				$node->setLeft($subnode);
+			} elseif ($subnode instanceof Model_Participant) {
+				$match->addParticipant($subnode);
+			}
 		} else {
 			// just return the participant because there is only the loser
 			unset($node);
