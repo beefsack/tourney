@@ -40,7 +40,11 @@ class Model_Type_DoubleElimination extends Model_Type_SingleElimination
 				throw new Exception("Unable to instantiate matchup object of type ".$this->getMatchuptype());
 			}
 			// Now build the match tree, which is done recursively
-			$this->_tree = $this->_createTree($matchups);
+			$winnertree = $this->_createTree($matchups);
+			
+			// Build the loser tree from the winner tree
+			
+			
 			$this->_dirty = false;
 		}
 	}

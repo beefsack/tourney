@@ -31,7 +31,7 @@ class Model_Participant
 	{
 		if ($this->_type && $this->_participantid) {
 			$participant = new $this->_type;
-			if ($participant instanceof Model_Participantable) {
+			if ($participant instanceof Model_Interface_Participant) {
 				$participant->load($this->_participantid);
 				return (string) $participant;				
 			}
@@ -123,7 +123,7 @@ class Model_Participant
 				throw new Exception('Participant type class does not exist');
 			}
 			$returnobj = new $this->_type;
-			if ($returnobj instanceof Model_Participantable) {
+			if ($returnobj instanceof Model_Interface_Participant) {
 				$returnobj->load($this->_participantid);
 				return $returnobj;
 			}

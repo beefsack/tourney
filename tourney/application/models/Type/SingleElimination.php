@@ -1,6 +1,6 @@
 <?php
 
-class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_Treeable
+class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_Interface_Tree
 {
 	// The tree for the elimination
 	protected $_tree;

@@ -1,6 +1,6 @@
 <?php
 
-interface Model_Participantable
+interface Model_Interface_Participant
 {
 	/**
 	 * Uses the __toString method for view output.  Intended to be a link to a page about the participant

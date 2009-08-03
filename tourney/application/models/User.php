@@ -1,6 +1,6 @@
 <?php
 
-class Model_User implements Model_Participantable
+class Model_User implements Model_Interface_Participant, Model_Interface_Unique
 {
 	// Instance of the DbTable to directly access the database.  Accessed via $this->_getTable()
 	static protected $_table;
@@ -35,6 +35,10 @@ class Model_User implements Model_Participantable
 		return $this->_table;
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see models/Interface/Model_Interface_Participant#getId()
+	 */
 	public function getId()
 	{
 		return $this->_name;
@@ -54,6 +58,15 @@ class Model_User implements Model_Participantable
 	 * @return string
 	 */
 	public function getname()
+	{
+		return $this->_name;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see models/Interface/Model_Interface_Unique#getUniqueId()
+	 */
+	public function getUniqueId()
 	{
 		return $this->_name;
 	}

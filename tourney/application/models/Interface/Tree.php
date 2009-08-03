@@ -1,6 +1,6 @@
 <?php
 
-interface Model_Treeable
+interface Model_Interface_Tree
 {
 	/**
 	 * Returns a structured tree of the tournament

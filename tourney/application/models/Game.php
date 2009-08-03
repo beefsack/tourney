@@ -1,6 +1,6 @@
 <?php
 
-class Model_Game
+class Model_Game implements Model_Interface_Unique
 {
 	// The description of the game = db description column
 	protected $_description;
@@ -70,6 +70,15 @@ class Model_Game
 	public function getScoringtype()
 	{
 		return $this->_scoringtype;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see models/Interface/Model_Interface_Unique#getUniqueId()
+	 */
+	public function getUniqueId()
+	{
+		return $this->_id;
 	}
 	
 	/**

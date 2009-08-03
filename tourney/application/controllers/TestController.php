@@ -68,10 +68,10 @@ class TestController extends Zend_Controller_Action
 		if ($tourneyid) {
 			$tourney = Model_Type_Abstract::factory($tourneyid);
 			$this->view->id = $tourney->getId();
-			if ($tourney instanceof Model_Treeable) {
+			if ($tourney instanceof Model_Interface_Tree) {
 				$this->view->tourneyTree = $tourney->getTree();
 			}
-			if ($tourney instanceof Model_Ladderable) {
+			if ($tourney instanceof Model_Interface_Ladder) {
 				$this->view->tourneyLadder = $tourney->getLadder();
 			}
 		}
@@ -149,11 +149,11 @@ class TestController extends Zend_Controller_Action
 						//$this->_helper->redirector('tourney', 'test', NULL, array('id' => $eggtourney->getId())); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
 					}
 		
-					if ($eggtourney instanceof Model_Treeable) {
+					if ($eggtourney instanceof Model_Interface_Tree) {
 						$this->view->tourneyTree = $eggtourney->getTree();
 					}
 		
-					if ($eggtourney instanceof Model_Ladderable) {
+					if ($eggtourney instanceof Model_Interface_Ladder) {
 						$this->view->tourneyLadder = $eggtourney->getLadder();
 					}
 					

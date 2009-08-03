@@ -1,6 +1,6 @@
 <?php
 
-class Model_Type_Ladder extends Model_Type_Abstract implements Model_Ladderable
+class Model_Type_Ladder extends Model_Type_Abstract implements Model_Interface_Ladder
 {
 	// The ladder info for this object
 	protected $_ladder;

@@ -1,6 +1,6 @@
 <?php
 
-class Model_Type_Season extends Model_Type_Abstract implements Model_Treeable, Model_Ladderable
+class Model_Type_Season extends Model_Type_Abstract implements Model_Interface_Tree, Model_Interface_Ladder
 {
 	// The ladder info for this object
 	protected $_ladder;

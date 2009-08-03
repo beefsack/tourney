@@ -1,6 +1,6 @@
 <?php
 
-class Model_Match
+class Model_Match implements Model_Interface_Unique
 {
 	// Match data = db data column
 	protected $_data;
@@ -250,6 +250,15 @@ class Model_Match
 		return $this->_tourneyid;
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see models/Interface/Model_Interface_Unique#getUniqueId()
+	 */
+	public function getUniqueId()
+	{
+		return $this->_id;
+	}
+
 	public function handleForm(array $data)
 	{
 		$this->setPlaytime($data['playdate'] . ' ' . $data['playtime']);

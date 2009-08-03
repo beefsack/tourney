@@ -1,6 +1,6 @@
 <?php
 
-abstract class Model_Type_Abstract
+abstract class Model_Type_Abstract implements Model_Interface_Unique
 {
 	// Instance of the DbTable to directly access the database.  Accessed via $this->_getAdminTable()
 	static protected $_adminTable;
@@ -281,6 +281,15 @@ abstract class Model_Type_Abstract
 	 * @return String
 	 */
 	abstract public function getTypeName();
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see models/Interface/Model_Interface_Unique#getUniqueId()
+	 */
+	public function getUniqueId()
+	{
+		return $this->_id;
+	}
 	
 	/**
 	 * Takes data returned from the form and adds it to this object
