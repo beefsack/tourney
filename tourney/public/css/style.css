@@ -119,6 +119,7 @@ h1
 }
 
 .treematch {
+	cursor: pointer;
 	position: relative;
 	top: -20px;
 	width: 100%;

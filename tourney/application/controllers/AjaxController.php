@@ -6,6 +6,19 @@ class AjaxController extends Zend_Controller_Action
 	public function init()
 	{
 	}
+	
+	public function matchformAction()
+	{
+		$matchId = $this->_getParam("matchid");
+		$form=new Form_ScoreInput;
+		$form->setPlayers($matchId);
+		
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        
+        echo $form;
+		
+	}
 
 	public function playersAction()
 	{

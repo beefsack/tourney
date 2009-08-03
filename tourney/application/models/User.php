@@ -20,7 +20,8 @@ class Model_User implements Model_Interface_Participant, Model_Interface_Unique
 				'action' => 'view',
 				'id' => $this->_name,
 			), NULL, true);
-		return "<a href=\"" . $url . "\">" . $this->_name . "</a>";
+		//return "<a href=\"" . $url . "\">" . $this->_name . "</a>";
+		return $this->_name;
 	}
 	
 	/**

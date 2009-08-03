@@ -1,0 +1,31 @@
+ <?php 
+ 
+
+ $theForm = new Form_ScoreInput;
+ $theForm->setPlayers(1);
+
+ echo $this->customDijit(
+    'dialog2',
+	$theForm,
+    array(
+    
+        'dojoType' => 'dijit.Dialog',
+        'title'    => 'Enter Scores',
+        'region'   => 'center',
+   )
+);
+
+ echo $this->customDijit(
+    'butt',
+    $content,
+    array(
+    
+        'dojoType' => 'dijit.form.Button',
+        'label'    => 'HA!',
+        'region'   => 'center',
+        'onclick' => "dijit.byId('dialog2').show()",
+   )
+);
+ ?>
+
+

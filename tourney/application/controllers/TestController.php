@@ -24,6 +24,12 @@ class TestController extends Zend_Controller_Action
 		}
 	}
 	
+	public function popupAction()
+	{
+		
+	
+	}
+	
 	public function testvcAction()
 	{
 		$vc = new Model_VictoryCondition_HighestScore();

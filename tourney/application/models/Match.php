@@ -30,7 +30,8 @@ class Model_Match implements Model_Interface_Unique
 					'action' => 'view',
 					'id' => $this->_id,
 			), NULL, true);
-			$str .= "<a href=\"" . $url . "\">#" . $this->_id . "</a>";
+			//$str .= "<a href=\"" . $url . "\">#" . $this->_id . "</a>";
+			$str .= $this->_id;
 		}
 		return $str;
 	}

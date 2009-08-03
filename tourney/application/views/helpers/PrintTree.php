@@ -4,8 +4,27 @@
 
 class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 {
+	
+	
 	public function printTree(Model_TreeType $tree)
 	{
+		
+		$this->view->headScript()->appendFile(PUBLIC_PATH . '/js/match.js');
+		$theForm = new Form_ScoreInput;
+		
+		$theForm->setPlayers(1);
+		
+		$str.= $this->view->customDijit(
+		'scoredialog',
+		$theForm,
+		array(
+
+        	'dojoType' => 'dijit.Dialog',
+        	'title'    => 'Enter Scores',
+        	'region'   => 'center',
+   		)
+   		
+		);
 		$str .= "<div class=\"tree\">\n";
 		$str .= $this->_stepTree($tree);
 		$str .= "</div>\n";
@@ -24,7 +43,9 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 <div class=\"treespacer\" style=\"height:" . (($powdepth * $baseHeight - $baseHeight) / 2) . "px;\"></div>
 <div class=\"treematchholder\">
 <div class=\"treeverthax\">
-<div class=\"treematch\">\n";
+
+<div class=\"treematch\" onclick=\"getMatchForm(" . $data->getId() . ")\" >\n";
+		//getForm(".$data->getId().")
 		if ($data instanceof Model_Match) {
 			$str .= "<div class=\"treematchinfo\">Match " . $data . "</div>\n";
 			foreach ($data->getParticipantList() as $p) {
