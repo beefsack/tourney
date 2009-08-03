@@ -42,11 +42,102 @@ class Model_Type_DoubleElimination extends Model_Type_SingleElimination
 			// Now build the match tree, which is done recursively
 			$winnertree = $this->_createTree($matchups);
 			
-			// Build the loser tree from the winner tree
+			// Unset the root data in winnertree
+			$winnertree->data()->setData('root', 'false');
 			
+			// Build the loser tree from the winner tree
+			$losertree = $this->_createLoserTree($winnertree);
+			
+			// Create final node and match
+			$node = new Model_TreeType();
+			$node->setLeft($winnertree);
+			$node->setRight($losertree);
+			$match = new Model_Match();
+			$match->setData('root', 'true');
+			$match->setData('matchtype', 'tree');
+			$match->setGame($this->getGame()->getId());
+			// winner of the winner tree
+			$participant = new Model_Participant();
+			$participant->setData('source', $winnertree->data());
+			$participant->setData('sourcetype', 'winner');
+			$match->addParticipant($participant);
+			// winner of the loser tree
+			$participant = new Model_Participant();
+			$participant->setData('source', $winnertree->data());
+			$participant->setData('sourcetype', 'winner');
+			$match->addParticipant($participant);
+			// set node data
+			$node->setData($match);
+			
+			$this->_tree = $node;
 			
 			$this->_dirty = false;
 		}
+	}
+	
+	protected function _createLoserTree(Model_TreeType $sourcetree)
+	{
+		// create a node for this point in the tree
+		$node = new Model_TreeType();
+		// create a match for this node
+		$match = new Model_Match();
+		$match->setData('matchtype', 'tree');
+		$match->setGame($this->getGame()->getId());
+		// add the loser participant to this match
+		$participant = new Model_Participant();
+		$participant->setData('source', $sourcetree->data());
+		$participant->setData('sourcetype', 'loser');
+		$match->addParticipant($participant);
+		$node->setData($match);
+		if ($sourcetree->left()) {
+			$left = $this->_createLoserTree($sourcetree->left());
+		}
+		if ($sourcetree->right()) {
+			$right = $this->_createLoserTree($sourcetree->right());
+		}
+		if ($left && $right) {
+			// create match node from left and right matches and append it
+			$subnode = new Model_TreeType();
+			$submatch = new Model_Match();
+			$submatch->setData('matchtype', 'tree');
+			$submatch->setGame($this->getGame()->getId());
+			// left participant
+			if ($left instanceof Model_TreeType) {
+				$subnode->setLeft($left);
+				$subparticipant = new Model_Participant();
+				$subparticipant->setData('source', $left->data());
+				$subparticipant->setData('sourcetype', 'winner');
+				$submatch->addParticipant($subparticipant);
+			} elseif ($left instanceof Model_Participant) {
+				$submatch->addParticipant($left);
+			}
+			// right participant
+			if ($right instanceof Model_TreeType) {
+				$subnode->setRight($right);
+				$subparticipant = new Model_Participant();
+				$subparticipant->setData('source', $right->data());
+				$subparticipant->setData('sourcetype', 'winner');
+				$submatch->addParticipant($subparticipant);
+			} elseif ($right instanceof Model_Participant) {
+				$submatch->addParticipant($right);
+			}
+			// set this match to be the data of this node
+			$subnode->setData($submatch);
+			// Add winner of this subnode to parent match and add subnode to node
+			$participant = new Model_Participant();
+			$participant->setData('source', $submatch);
+			$participant->setData('sourcetype', 'winner');
+			$match->addParticipant($participant);
+			$node->setLeft($subnode);
+		} elseif ($left || $right) {
+			
+		} else {
+			// just return the participant because there is only the loser
+			unset($node);
+			unset($match);
+			return $participant;
+		}
+		return $node;
 	}
 	
 	/**

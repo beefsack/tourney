@@ -30,7 +30,7 @@ class Model_Type_Season extends Model_Type_Abstract implements Model_Interface_T
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see models/Model_Ladderable#getLadder()
+	 * @see models/Model_Interface_Ladder#getLadder()
 	 */
 	public function getLadder()
 	{
@@ -39,7 +39,7 @@ class Model_Type_Season extends Model_Type_Abstract implements Model_Interface_T
 
 	/**
 	 * (non-PHPdoc)
-	 * @see models/Model_Treeable#getTree()
+	 * @see models/Model_Interface_Tree#getTree()
 	 */
 	public function getTree()
 	{

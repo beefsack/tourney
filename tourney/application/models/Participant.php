@@ -246,10 +246,10 @@ class Model_Participant
 	
 	/**
 	 * Set the participant for this object
-	 * @param Model_Participantable $participant The participant to set
+	 * @param Model_Interface_Participant $participant The participant to set
 	 * @return $this
 	 */
-	public function set(Model_Participantable $participant)
+	public function set(Model_Interface_Participant $participant)
 	{
 		if (!($this->_participantid = $participant->getId())) {
 			throw new Exception('No participant id returned');

@@ -50,7 +50,7 @@ class Model_Type_Ladder extends Model_Type_Abstract implements Model_Interface_L
 
 	/**
 	 * (non-PHPdoc)
-	 * @see models/Model_Ladderable#getLadder()
+	 * @see models/Model_Interface_Ladder#getLadder()
 	 */
 	public function getLadder()
 	{

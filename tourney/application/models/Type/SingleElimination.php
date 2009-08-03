@@ -131,7 +131,6 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 				$participant->setData('source', $left->data());
 				$participant->setData('sourcetype', 'winner');
 				$match->addParticipant($participant);
-				$match->setData('left', $left->data());
 			} elseif ($left instanceof Model_Participant) {
 				// Left is a participant, so just add it to this match
 				$match->addParticipant($left);
@@ -147,7 +146,6 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 				$participant->setData('source', $right->data());
 				$participant->setData('sourcetype', 'winner');
 				$match->addParticipant($participant);
-				$match->setData('right', $right->data());
 			} elseif ($right instanceof Model_Participant) {
 				// Right is a participant, so just add it to this match
 				$match->addParticipant($right);
@@ -290,6 +288,12 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 		}
 		$data = $node->data();
 		if ($data instanceof Model_Match) {
+			if ($node->left() && $node->left()->data() instanceof Model_Match) {
+				$data->setData('left', $node->left()->data()->getId());
+			}
+			if ($node->right() && $node->right()->data() instanceof Model_Match) {
+				$data->setData('right', $node->right()->data()->getId());
+			}
 			$data->setTourneyid($this->_id);
 			foreach ($data->getParticipantList() as $p) {
 				if ($p instanceof Model_Participant) {
@@ -298,14 +302,6 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 						$p->setData('source', $source->getId());
 					}
 				}
-			}
-			$match = $data->getData('left');
-			if ($match && $match instanceof Model_Match) {
-				$data->setData('left', $match->getId());
-			}
-			$match = $data->getData('right');
-			if ($match && $match instanceof Model_Match) {
-				$data->setData('right', $match->getId());
 			}
 			$data->save();
 		}
@@ -322,7 +318,7 @@ class Model_Type_SingleElimination extends Model_Type_Abstract implements Model_
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see models/Model_Treeable#getTree()
+	 * @see models/Model_Interface_Tree#getTree()
 	 */
 	public function getTree()
 	{
