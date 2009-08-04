@@ -6,6 +6,7 @@ function getMatchForm(matchid)
 
 function saveMatchForm()
 {
+	// FOR REFERENCE: pretty much copied from http://docs.dojocampus.org/dijit/layout/ContentPane
 	// Only try to save if the form is valid
 	if (dijit.byId("scoreinputform").isValid()) {
 		// Sends data to a URL using POST, there is also a form xhrGet to send using GET
