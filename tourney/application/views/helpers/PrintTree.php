@@ -10,6 +10,7 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 	{
 		if (!$treeonly) {
 			$this->view->headScript()->appendFile(PUBLIC_PATH . '/js/match.js');
+			$this->view->headScript()->appendFile(PUBLIC_PATH . '/js/tree.js');
 			$theForm = new Form_ScoreInput;
 			
 			$theForm->setPlayers(1);
@@ -27,7 +28,15 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 			$str .= "<div id=\"treecontentpane\" dojoType=\"dijit.layout.ContentPane\" class=\"tree\">\n";
 		}
 		$str .= $this->_stepTree($tree);
-		if (!$treeonly) $str .= "</div>\n";
+		if (!$treeonly) {
+			$str .= "</div>\n";
+			//echo $this->view->inlineScript("setPanElement(document.getElementById('treecontentpane');");
+			$str .= "<script type=\"text/javascript\">
+//<![CDATA[
+	setPanElement(document.getElementById('treecontentpane'));
+//]]>
+</script>\n";
+		}
 		return $str;
 	}
 	
