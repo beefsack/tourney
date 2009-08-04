@@ -9,13 +9,13 @@ class AjaxController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);    
 	}
 	
-	public function savematchAction()
+	public function savematchscoreAction()
 	{
 		try {
-		$matchid = $this->_getParam('matchid');
-		$match = new Model_Match($matchid);
-		$match->handleForm($this->_getAllParams());
-		$match->save();
+			$matchid = $this->_getParam('matchid');
+			$match = new Model_Match($matchid);
+			$match->handleForm($this->_getAllParams());
+			$match->save();
 		} catch (Exception $e) {
 			header("HTTP/1.0 404 Not Found");
 			exit;
@@ -35,7 +35,7 @@ class AjaxController extends Zend_Controller_Action
 		}
 	}
 	
-	public function matchformAction()
+	public function matchscoreformAction()
 	{
 		$matchid = $this->_getParam('matchid');
 		

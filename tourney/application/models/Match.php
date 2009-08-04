@@ -265,7 +265,7 @@ class Model_Match implements Model_Interface_Unique
 	{
 		$this->setPlaytime(time());
 		foreach ($this->_participantList as $p) {
-			$p->setScore($data[$p->getId().'score']);
+			$p->setScore($data[$p->getId() . 'score']);
 		}
 	}
 	

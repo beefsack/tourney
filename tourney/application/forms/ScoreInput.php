@@ -15,19 +15,21 @@ class Form_ScoreInput extends Zend_Dojo_Form
 		{
 			$element = new Zend_Dojo_Form_Element_NumberTextBox($p->getId() . 'score');
 			$element->setLabel($p);
-
+			if ($score = $p->getScore()) {
+				$element->setValue($score);
+			}
 			$element->setRequired(true);
 			$this->addElement($element);
 		}
 
 		$element = new Zend_Form_Element_Hidden('tourneyid');
 		$element->setValue($curMatch->getTourneyid());
-		$element->clearDecorators();
+		$element->setDecorators(array(array('ViewHelper')));
 		$this->addElement($element);
 
 		$element = new Zend_Form_Element_Hidden('matchid');
 		$element->setValue($curMatch->getId());
-		$element->clearDecorators();
+		$element->setDecorators(array(array('ViewHelper')));
 		$this->addElement($element);
 
 		$element = new Zend_Dojo_Form_Element_SubmitButton('submit');
