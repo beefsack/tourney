@@ -29,5 +29,5 @@ function saveMatchForm()
 		//submits that form to the specified URL
 		form:"scoreinputform"
 	});
-	return false; // This stops the form from actually submitting and opening a new page
+	return false; // This stops the form from actually submitting and opening a new page.  We want to stay on the same page and let ajax reload element
 }

@@ -22,10 +22,12 @@ class Form_ScoreInput extends Zend_Dojo_Form
 
 		$element = new Zend_Form_Element_Hidden('tourneyid');
 		$element->setValue($curMatch->getTourneyid());
+		$element->clearDecorators();
 		$this->addElement($element);
 
 		$element = new Zend_Form_Element_Hidden('matchid');
 		$element->setValue($curMatch->getId());
+		$element->clearDecorators();
 		$this->addElement($element);
 
 		$element = new Zend_Dojo_Form_Element_SubmitButton('submit');

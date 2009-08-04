@@ -15,16 +15,15 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 			$theForm->setPlayers(1);
 			
 			$str.= $this->view->customDijit(
-			'scoredialog',
-			$theForm,
-			array(
-	
-	        	'dojoType' => 'dijit.Dialog',
-	        	'title'    => 'Enter Scores',
-	        	'region'   => 'center',
-	   		)
-	   		
-			);
+				'scoredialog',
+				$theForm,
+				array(
+		        	'dojoType'	=> 'dijit.Dialog',
+		        	'title'		=> 'Enter Scores',
+		        	'region'	=> 'center',
+					'style'		=> 'font-family: sans-serif; font-size: 10pt;'
+	   			)
+	   		);
 			$str .= "<div id=\"treecontentpane\" dojoType=\"dijit.layout.ContentPane\" class=\"tree\">\n";
 		}
 		$str .= $this->_stepTree($tree);
