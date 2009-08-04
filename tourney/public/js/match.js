@@ -1,9 +1,7 @@
 function getMatchForm(matchid)
 {
-
 	dijit.byId('scoredialog').attr('href', '/tourney/public/ajax/matchscoreform/matchid/' + matchid);
 	dijit.byId('scoredialog').show();
-
 }
 
 function saveMatchForm()
@@ -21,7 +19,11 @@ function saveMatchForm()
 			// What to do once the page has been loaded (ie. the form was successfully sent)
 			load: function(data) {
 				// Reload the tree and hide the dialog
-				dijit.byId('treecontentpane').attr('href', '/tourney/public/ajax/tree/tourneyid/' + document.getElementById('tourneyid').value);
+				var treecontentpane = dijit.byId('treecontentpane');
+				// I set the "loading message" for the tree to the current content so that the tree doesn't disappear momentarily while loading
+				treecontentpane.attr('loadingMessage', treecontentpane.attr('content'));
+				// Refresh the tree
+				treecontentpane.attr('href', '/tourney/public/ajax/tree/tourneyid/' + document.getElementById('tourneyid').value);
 				dijit.byId('scoredialog').hide();
 			},
 			// What to do if there is an error

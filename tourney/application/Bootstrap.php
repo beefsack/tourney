@@ -7,7 +7,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$layout = Zend_Layout::startMvc();
 		Zend_Dojo::enableView($layout->getView());
 		Zend_Dojo_View_Helper_Dojo::setUseDeclarative();
-		
 	}
 	
 	protected function _initDoctype()
