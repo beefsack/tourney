@@ -30,7 +30,6 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 		$str .= $this->_stepTree($tree);
 		if (!$treeonly) {
 			$str .= "</div>\n";
-			//echo $this->view->inlineScript("setPanElement(document.getElementById('treecontentpane');");
 			$str .= "<script type=\"text/javascript\">
 //<![CDATA[
 	setPanElement(document.getElementById('treecontentpane'));
@@ -46,7 +45,7 @@ class Zend_View_Helper_PrintTree extends Zend_View_Helper_Abstract
 		$powdepth = pow(2, $treeDepth - 1);
 		$data = $tree->data();
 		$str .= "<div class=\"treecontainer\"";
-		if ($root) $str .= " style=\"float:left;width:" . ($treeDepth * $baseWidth * 2 - $baseWidth + $treeDepth) . "px;height:" . ($powdepth * $baseHeight + $powdepth) . "px;\"";
+		if ($root) $str .= " style=\"width:" . ($treeDepth * $baseWidth * 2 - $baseWidth + $treeDepth) . "px;height:" . ($powdepth * $baseHeight + $powdepth) . "px;\"";
 		$str .= ">
 <div class=\"treecol\">
 <div class=\"treespacer\" style=\"height:" . (($powdepth * $baseHeight - $baseHeight) / 2) . "px;\"></div>

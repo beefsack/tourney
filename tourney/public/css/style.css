@@ -100,7 +100,7 @@ h1
 
 .tree {
 	overflow: auto;
-	border: 1px solid black;
+	border: 1px solid #60a8b2;
 	background-color: #ffffff;
 	max-height: 700px;
 }
@@ -108,6 +108,12 @@ h1
 .treecontainer {
 	float: right;
 	clear: both;
+}
+
+.tree > .treecontainer {
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .treematchholder {
