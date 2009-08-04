@@ -103,6 +103,7 @@ h1
 	border: 1px solid #60a8b2;
 	background-color: #ffffff;
 	max-height: 700px;
+	cursor: move;
 }
 
 .treecontainer {

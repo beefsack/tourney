@@ -1,3 +1,7 @@
+/**
+ * Tree drag scrolling code
+ */
+
 document.onmousemove = mouseMove;
 document.onmouseup = treeEndPan;
 
