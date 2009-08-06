@@ -59,6 +59,12 @@ class Model_Participant
 		return $this->_table;
 	}
 	
+	public function clearId()
+	{
+		$this->_id = NULL;
+		return $this;
+	}
+	
 	/**
 	 * Gets the data at the offset
 	 * @param $offset Offset to get data from
@@ -225,7 +231,7 @@ class Model_Participant
 		 */
 		// Make sure username is set
 		if (!$this->_matchid) {
-			throw new Exception('Unable to save participant as no matchid specified');
+			throw new Exception('Unable to save participant as no matchid specified' . Zend_Debug::dump($this, NULL, false));
 		}
 		$data = array(
 			'matchid' => (integer) $this->_matchid,

@@ -124,6 +124,12 @@ class Model_Match implements Model_Interface_Unique
 		$this->_participantList->addParticipant($participant);
 		return $this;
 	}
+	
+	public function clearId()
+	{
+		$this->_id = NULL;
+		return $this;
+	}
 
 	/**
 	 * Get an item from the dataObject
@@ -356,22 +362,20 @@ class Model_Match implements Model_Interface_Unique
 			$this->_getTable()->insert($data);
 			$this->_id = $this->_getTable()->getAdapter()->lastInsertId();
 		}
-			
+
 		// Now save the participants below this match.
 		// Care is taken to first check that the participants don't have a different matchid as the participant may be referenced in many matches
+		//Zend_Debug::dump($this->_participantList);
 		foreach ($this->_participantList as $p) {
 			if ($p instanceof Model_Participant) {
 				if ($p->getMatchid() && $p->getMatchid() != $this->_id) {
 					// There is a participant belonging to this match that has a different matchid, so we copy it so we don't stuff up the original
-					$this->_participantList->removeParticipant($p);
-					$newp = clone($p);
-					$newp->setMatchid($this->_id);
-					$this->_participantList->addParticipant($newp);
-				} else {
-					$p->setMatchid($this->_id);
+					$p->clearId();
 				}
+				$p->setMatchid($this->_id);
 			}
 		}
+		//Zend_Debug::dump($this->_participantList);
 		
 		// Now update the results if this match has a result
 		if ($this->hasResult()) {

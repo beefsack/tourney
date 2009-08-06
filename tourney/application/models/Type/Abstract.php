@@ -89,6 +89,7 @@ abstract class Model_Type_Abstract implements Model_Interface_Unique
 				} else {
 					$m->setTourneyid($this->_id);
 				}
+				$m->setTourneyid($this->_id);
 			}
 		}
 		$this->_matchList->save();
