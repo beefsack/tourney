@@ -314,7 +314,9 @@ abstract class Model_Type_Abstract implements Model_Interface_Unique
 		}		
 		
 		// Pass the data to the type specific handler for any extra data
-		$this->_typeSpecificHandleForm($data['typesubform']);
+		if (is_array($data['typesubform'])) {
+			$this->_typeSpecificHandleForm($data['typesubform']);
+		}
 	}
 	
 	/**
