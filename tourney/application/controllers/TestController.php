@@ -150,10 +150,10 @@ class TestController extends Zend_Controller_Action
 					$eggtourney->handleForm($post);
 					
 					// Now we have a list of participants, a game, and a matchup type, lets save the tourney which will build it and save it to the database.
-					if ($this->_getParam('save', '') == 'true') {
+					//if ($this->_getParam('save', '') == 'true') {
 						$eggtourney->save();
-						//$this->_helper->redirector('tourney', 'test', NULL, array('id' => $eggtourney->getId())); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
-					}
+						$this->_helper->redirector('view', 'tourney', NULL, array('id' => $eggtourney->getId())); // Forwards to the index action of the index controller.  First arg for action, second for controller (optional)
+					//}
 		
 					if ($eggtourney instanceof Model_Interface_Tree) {
 						$this->view->tourneyTree = $eggtourney->getTree();

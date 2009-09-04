@@ -21,6 +21,20 @@ abstract class Model_Type_Abstract implements Model_Interface_Unique
 	// Instance of the DbTable to directly access the database.  Accessed via $this->_getTable()
 	static protected $_table;
 	
+	public function __toString()
+	{
+		if (isset($this->_id)) {
+			$str = "<a href=\"";
+			$str .= Zend_View_Helper_Url::url(
+			array('controller' => 'tourney',
+					'action' => 'view',
+					'id' => $this->_id,
+			), NULL, true);
+			$str .= "\">" . $this->getName() . "</a>";
+		}
+		return $str;
+	}
+	
 	/**
 	 * Build the tournament, should only run if $_dirty.  Clears the match list and builds a new one
 	 */
@@ -282,6 +296,11 @@ abstract class Model_Type_Abstract implements Model_Interface_Unique
 	 * @return String
 	 */
 	abstract public function getTypeName();
+	
+	public function getName()
+	{
+		return $this->_name;
+	}
 	
 	/**
 	 * (non-PHPdoc)

@@ -1,0 +1,5 @@
+<h1><?php echo $this->name ?></h1>
+
+<?php echo (isset($this->tourneyTree)) ? $this->printTree($this->tourneyTree) : '' ?>
+
+<?php echo (isset($this->tourneyLadder)) ? $this->printLadder($this->tourneyLadder) : '' ?>
